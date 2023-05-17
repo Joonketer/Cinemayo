@@ -12,7 +12,7 @@ class MovieListSerializer(serializers.ModelSerializer):
                   'genres', 'season', 'weather')
 
 
-# 영화
+# 영화 상세
 class MovieSerializer(serializers.ModelSerializer):
 
     class ReviewSerializer(serializers.ModelSerializer):
