@@ -31,9 +31,11 @@ export default {
                 username, password
             }
 
-            this.$store.dispatch('login',payload)
-        }
+            this.$store.dispatch('login',payload).then(() => {
+            this.$emit('loginSuccess');
+        })
     }
+  },
 }
 </script>
 

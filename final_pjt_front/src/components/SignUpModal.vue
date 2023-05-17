@@ -42,7 +42,9 @@ export default {
             const payload = {
                 username, password1, password2
             }
-        this.$store.dispatch('signUp',payload)    
+        this.$store.dispatch('signUp',payload).then(() => {
+      this.$emit('signUpSuccess');  
+        })
         },
         passwordLength() {
             if (this.password1.length < 10){
@@ -60,6 +62,7 @@ export default {
         }
     }
 }
+
 </script>
 
 <style>
