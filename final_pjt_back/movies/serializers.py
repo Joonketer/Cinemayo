@@ -2,7 +2,7 @@ from rest_framework import serializers
 from ..models import Movie, Review
 from django.contrib.auth import get_user_model
 
-# movie list
+# Main 영화 리스트
 
 
 class MovieListSerializer(serializers.ModelSerializer):
@@ -12,7 +12,7 @@ class MovieListSerializer(serializers.ModelSerializer):
                   'genres', 'season', 'weather')
 
 
-# movie detail
+# 영화
 class MovieSerializer(serializers.ModelSerializer):
 
     class ReviewSerializer(serializers.ModelSerializer):
@@ -27,6 +27,8 @@ class MovieSerializer(serializers.ModelSerializer):
     class Meta:
         model = Movie
         fields = '__all__'
+
+# 리뷰 리스트 전부
 
 
 class ReviewListSerializer(serializers.ModelSerializer):
@@ -49,6 +51,8 @@ class ReviewSerializer(serializers.ModelSerializer):
         model = Review
         # fields = ('content', 'user_vote_average', 'created_at', 'user', 'movie','id')
         fields = '__all__'
+
+# 유저 이름
 
 
 class UserSerializer(serializers.ModelSerializer):
