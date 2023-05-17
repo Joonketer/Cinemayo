@@ -12,7 +12,7 @@ import LoginModal from '@/components/LoginModal.vue'
 import SignUpModal from '@/components/SignUpModal.vue'
 
 export default {
-    name:'intro',
+    name:'IntroPage',
     components:{
         LoginModal,
         SignUpModal,
