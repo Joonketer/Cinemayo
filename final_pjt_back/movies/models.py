@@ -5,15 +5,16 @@ from django.conf import settings
 
 
 class Genre(models.Model):
-    genre_id = models.IntegerField(unique=True, null=True)
-    name = models.CharField(max_length=50)
+    # genre_id = models.IntegerField(unique=True, null=True)
+    genre_id = models.IntegerField(primary_key=True)
+    genre_name = models.CharField(max_length=50)
 
     def __str__(self):
         return self.genre_name
 
 
 class Movie(models.Model):
-    id = models.IntegerField(primary_key=True)  # 키 값
+    movie_id = models.IntegerField(primary_key=True)  # 키 값
     title = models.CharField(max_length=100)    # 영화제목
     release_date = models.DateField()   # 개봉일
     popularity = models.FloatField()    # 인기도
@@ -21,6 +22,7 @@ class Movie(models.Model):
     vote_count = models.IntegerField()
     overview = models.TextField()  # 줄거리
     poster_path = models.CharField(max_length=200)  # 사진
+    backdrop_path = models.CharField(max_length=200, null=True)
     genre_ids = models.ManyToManyField(Genre)   # 장르
     like_users = models.ManyToManyField(    # 좋아요한 사람
         settings.AUTH_USER_MODEL, related_name='like_movies', blank=True)

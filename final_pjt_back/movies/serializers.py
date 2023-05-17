@@ -11,22 +11,22 @@ class UserSerializer(serializers.ModelSerializer):
 # # 장르 가져올 것
 
 
-class GenreListSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Genre
-        fields = ('name')
-
 # Main 영화 리스트
 
 
 class MovieListSerializer(serializers.ModelSerializer):
 
-    genres = GenreListSerializer(many=True)
+    class GenreListSerializer(serializers.ModelSerializer):
+        class Meta:
+            model = Genre
+            fields = ('name',)
+
+    genre_ids = GenreListSerializer(many=True, read_only=True)
 
     class Meta:
         model = Movie
         # fields = ('id', 'like_users', 'title', 'overview', 'poster_path',
-        #           'genres',)
+        #           'genre_ids',)
         fields = '__all__'
 
 # 영화 상세
