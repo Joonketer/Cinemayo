@@ -13,18 +13,9 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib import admin
+
 from django.urls import path, include
 
 urlpatterns = [
-    # 관리자 페이지
-    path('admin/', admin.site.urls),
-    # 영화 관련
-    path('api/v1/', include('movies.urls')),
-    # 커뮤니티 관련
-    path('api/v1/community/', include('boards.urls')),
-    # 계정 관련
-    path('accounts/', include('dj_rest_auth.urls')),
-    # 회원가입 관련
-    path('accounts/signup/', include('dj_rest_auth.registration.urls')),
+
 ]
