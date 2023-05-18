@@ -13,18 +13,18 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib import admin
+
 from django.urls import path, include
+from . import views
+
+app_name = 'boards'
 
 urlpatterns = [
-    # 관리자 페이지
-    path('admin/', admin.site.urls),
-    # 영화 관련
-    path('api/v1/', include('movies.urls')),
-    # 커뮤니티 관련
-    path('api/v1/community/', include('boards.urls')),
-    # 계정 관련
-    path('accounts/', include('dj_rest_auth.urls')),
-    # 회원가입 관련
-    path('accounts/signup/', include('dj_rest_auth.registration.urls')),
+    path("boards/", views.index, name="board_list"),
+    path("boards/<int:board_pk>/", views.board_detail, name="board_detail"),
+    path("comments/", views.comment_list, name="comment_list"),
+    path("comments/<int:board_pk>/comments/",
+         views.comment_create, name="comment_create"),
+    path("comments/<int:comment_pk>/",
+         views.comment_detail, name="comment_detail"),
 ]

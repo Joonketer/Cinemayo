@@ -13,18 +13,21 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib import admin
+
 from django.urls import path, include
+from . import views
+
+app_name = 'movies'
 
 urlpatterns = [
-    # 관리자 페이지
-    path('admin/', admin.site.urls),
-    # 영화 관련
-    path('api/v1/', include('movies.urls')),
-    # 커뮤니티 관련
-    path('api/v1/community/', include('boards.urls')),
-    # 계정 관련
-    path('accounts/', include('dj_rest_auth.urls')),
-    # 회원가입 관련
-    path('accounts/signup/', include('dj_rest_auth.registration.urls')),
+    path("movies/", views.movie_list, name="movie_list"),   # 전체 영화
+    path('movies/<int:movie_pk>/', views.movie_detail),  # 상세 영화
+    path('movies/<int:movie_pk>/review/', views.review_create),  # 영화 리뷰 작성
+    path('movies/<int:movie_pk>/like/', views.movie_like),  # 영화 좋아요
+    path('reviews/', views.review_list),    # 전체 리뷰
+    path('reviews/<int:review_pk>/', views.review_detail),  # 내가 쓴 리뷰
+    path('reviews/<int:review_pk>/like/', views.review_like),  # 영화 좋아요
+
+
+
 ]

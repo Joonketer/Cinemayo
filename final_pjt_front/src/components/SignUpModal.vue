@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <h1>SignUp</h1>
+  <div id="SignUp">
+    <h1>회원가입</h1>
     <form @submit.prevent="signUp">
         <label for="username">username : </label>
         <input type="text" id="username" v-model="username">
@@ -52,7 +52,7 @@ export default {
                 this.lengthwarning = ''
             }
         },
-        
+
         samePassword() {
             if (this.password1 != this.password2) {
                 this.samepasswarning = '입력한 비밀번호가 같아야 합니다.'
