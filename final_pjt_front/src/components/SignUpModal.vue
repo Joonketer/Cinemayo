@@ -42,10 +42,9 @@ export default {
             const payload = {
                 username, password1, password2
             }
-        this.$store.dispatch('signUp',payload).then(() => {
-      this.$emit('signUpSuccess');  
-        })
+        this.$store.dispatch('signUp',payload)
         },
+
         passwordLength() {
             if (this.password1.length < 10){
                 this.lengthwarning ='10자 이상 비밀번호가 추천됩니다.'
@@ -53,6 +52,7 @@ export default {
                 this.lengthwarning = ''
             }
         },
+        
         samePassword() {
             if (this.password1 != this.password2) {
                 this.samepasswarning = '입력한 비밀번호가 같아야 합니다.'

@@ -1,20 +1,16 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-// import axios from 'axios';
-import router from '@/router';
-// import createPersistedState from "vuex-persistedstate";
+import articles from './modules/articles'
+import users from './modules/users'
+import movies from './modules/movies'
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
-  state: {
-  },
-  getters: {
-  },
-  mutations: {
-  },
-  actions: {
-  },
+
   modules: {
+    movies,
+    articles,
+    users,
   }
 })

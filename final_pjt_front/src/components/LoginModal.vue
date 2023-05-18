@@ -10,6 +10,9 @@
 
       <input type="submit" value="logIn">
     </form>
+    <br>
+    계정이 없으신가요?ㅤ
+    <router-link :to="{ name: 'SignUpModal' }" style="color: #F21170">회원가입</router-link>
   </div>
 </template>
 
