@@ -33,6 +33,14 @@ class MovieListSerializer(serializers.ModelSerializer):
 
 
 class MovieSerializer(serializers.ModelSerializer):
+    # 장르 보여주기
+    class GenreListSerializer(serializers.ModelSerializer):
+        class Meta:
+            model = Genre
+            fields = ('genre_id', 'genre_name',)
+
+    genre_ids = GenreListSerializer(many=True, read_only=True)
+
     # 영화에 작성된 리뷰 가져오기
     class ReviewSerializer(serializers.ModelSerializer):
         user = UserSerializer(read_only=True)
@@ -46,6 +54,8 @@ class MovieSerializer(serializers.ModelSerializer):
         model = Movie
         fields = '__all__'
 
+# 전체 리뷰
+
 
 class ReviewListSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)
@@ -53,6 +63,8 @@ class ReviewListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Review
         fields = '__all__'
+
+# 상세 리뷰
 
 
 class ReviewSerializer(serializers.ModelSerializer):
