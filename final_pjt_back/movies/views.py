@@ -27,7 +27,7 @@ def movie_list(request):
 # 영화 상세
 
 
-@api_view(['PUT'])
+@api_view(['GET'])
 def movie_detail(request, movie_pk):
     # movie = Movie.objects.get(pk=movie_pk)
     movie = get_object_or_404(Movie, pk=movie_pk)

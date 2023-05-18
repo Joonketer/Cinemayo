@@ -8,7 +8,7 @@ class Board(models.Model):
                              on_delete=models.CASCADE)
     like_users = models.ManyToManyField(
         settings.AUTH_USER_MODEL, related_name='like_boards')
-    title = models.CharField(max_length=10)
+    title = models.CharField(max_length=100)
     board_type = models.IntegerField(default=0)  # 말머리
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
