@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from ..models import Board, Comment
+from .models import Board, Comment
+from django.contrib.auth import get_user_model
 
 
 class UserSerializer(serializers.ModelSerializer):

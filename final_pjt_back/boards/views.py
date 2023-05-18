@@ -1,11 +1,16 @@
-from django.shortcuts import render, redirect
-from django.views.decorators.http import require_http_methods, require_POST, require_safe
-from django.contrib.auth.decorators import login_required
-# from django.http import HttpResponse, HttpResponseForbidden
+from django.shortcuts import render
+
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
+
+from rest_framework.decorators import permission_classes
+from rest_framework.permissions import IsAuthenticated
+
+from rest_framework import status
+from django.shortcuts import get_object_or_404, get_list_or_404
+
 from .models import Board, Comment
 from .serializers import BoardListSerializer, BoardSerializer, CommentListSerializer, CommentSerializer
-from django.http import JsonResponse
-
 # Create your views here.
 
 
@@ -29,32 +34,52 @@ def board_detail(request, board_pk):
     board = get_object_or_404(Board, pk=board_pk)
 
     if request.method == 'GET':
-        serializer = BoardListSerializer(board)
+        serializer = BoardSerializer(board)
         return Response(serializer.data)
     elif request.method == 'DELETE':
         board.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
     elif request.method == 'PUT':
-        serializer = BoardListSerializer(board, data=request.data)
+        serializer = BoardSerializer(board, data=request.data)
         if serializer.is_valid(raise_exception=True):
             serializer.save()
             return Response(serializer.data)
 
 
-@api_view(['GET', 'POST'])
-def comment_list(reqeust, board_pk):
+@api_view(['GET'])
+def comment_list(reqeust):
+
+    # 모든 댓글
+    comments = Comment.objects.all()
+    serializer = CommentListSerializer(comments, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['POST'])
+def comment_create(reqeust, board_pk):
     # 게시글 가져오기
     board = get_object_or_404(Board, pk=board_pk)
 
-    # 모든 댓글
-    if reqeust.method == 'GET':
-        comments = article.comment_set.all()
-        serializer = CommentListSerializer(boards, many=True)
-        return Response(serializer.data)
-
     # 댓글 작성
-    elif reqeust.method == 'POST':
-        serializer = CommenntSerializer(data=reqeust.data)
+
+    serializer = CommenntSerializer(data=reqeust.data)
+    if serializer.is_valid(raise_exception=True):
+        serializer.save(board=board, user=reqeust.user)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+
+@api_view(['GET', 'DELETE', 'PUT'])
+def comment_detail(request, comment_pk):
+    comment = get_object_or_404(Comment, pk=comment_pk)
+
+    if request.method == 'GET':
+        serializer = CommentSerializer(comment)
+        return Response(serializer.data)
+    elif request.method == 'DELETE':
+        comment.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    elif request.method == 'PUT':
+        serializer = CommentSerializer(comment, data=request.data)
         if serializer.is_valid(raise_exception=True):
-            serializer.save(board=board, user=reqeust.user)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            serializer.save()
+            return Response(serializer.data)

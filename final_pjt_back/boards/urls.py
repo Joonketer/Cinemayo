@@ -15,7 +15,16 @@ Including another URLconf
 """
 
 from django.urls import path, include
+from . import views
+
+app_name = 'boards'
 
 urlpatterns = [
-
+    path("boards/", views.index, name="board_list"),
+    path("boards/<int:board_pk>/", views.board_detail, name="board_detail"),
+    path("comments/", views.comment_list, name="comment_list"),
+    path("comments/<int:board_pk>/comments/",
+         views.comment_create, name="comment_create"),
+    path("comments/<int:comment_pk>/",
+         views.comment_detail, name="comment_detail"),
 ]
