@@ -9,15 +9,16 @@ import UserProfileView from '@/views/UserProfileView'
 import DetailedSearchView from '@/views/DetailedSearchView'
 import BoxOfficeView from '@/views/BoxOfficeView'
 import FeaturedMovieView from '@/views/FeaturedMovieView'
-import CommunityView from '@/views/CommunityView'
+// import CommunityView from '@/views/CommunityView'
+import HomeView from '@/views/HomeView'
 
 Vue.use(VueRouter)
 
 const routes = [
   {
     path: '/',
-    name: 'ArticleView',
-    component: ArticleView
+    name: 'HomeView',
+    component: HomeView
   },
  
   {
@@ -70,8 +71,8 @@ const routes = [
 
   {
     path: '/community',
-    name: 'CommunityView',
-    component: CommunityView,
+    name: 'ArticleView',
+    component: ArticleView,
   },
 
 
