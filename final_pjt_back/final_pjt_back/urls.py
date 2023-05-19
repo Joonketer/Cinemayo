@@ -15,16 +15,21 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.conf.urls.static import static
+from django.conf import settings
 
 urlpatterns = [
     # 관리자 페이지
     path('admin/', admin.site.urls),
     # 영화 관련
     path('api/v1/', include('movies.urls')),
+    # 프로필,팔로우 관련
+    path('profile/', include('accounts.urls')),
     # 커뮤니티 관련
     path('api/v1/community/', include('boards.urls')),
     # 계정 관련
     path('accounts/', include('dj_rest_auth.urls')),
+    path('accounts/user/', include('dj_rest_auth.urls')),
     # 회원가입 관련
     path('accounts/signup/', include('dj_rest_auth.registration.urls')),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
