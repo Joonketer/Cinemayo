@@ -1,4 +1,4 @@
-# final_pjt_front
+# front-server
 
 ## Project setup
 ```

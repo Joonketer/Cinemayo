@@ -1,95 +1,86 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import store from '@/store' 
-import IntroPage from '@/views/IntroPage.vue'
-import HomePage from '@/views/HomePage.vue'
-import MoviesView from '@/views/Movies/MoviesView.vue'
-import MovieDetail from '@/views/Movies/MovieDetail.vue'
-import ProfileView from '@/views/accounts/UserProfile.vue'
-
-
+import ArticleView from '@/views/ArticleView'
+import CreateView from '@/views/CreateView'
+import DetailView from '@/views/DetailView'
+import SignUpView from '@/views/SignUpView'
+import LogInView from '@/views/LogInView'
+import UserProfileView from '@/views/UserProfileView'
+import DetailedSearchView from '@/views/DetailedSearchView'
+import BoxOfficeView from '@/views/BoxOfficeView'
+import FeaturedMovieView from '@/views/FeaturedMovieView'
+import CommunityView from '@/views/CommunityView'
 
 Vue.use(VueRouter)
 
 const routes = [
   {
-    path:'/',
-    redirect:'/intro'
+    path: '/',
+    name: 'ArticleView',
+    component: ArticleView
   },
+ 
   {
-    path: '/intro',
-    name:'IntroPage',
-    component:IntroPage
+    path: '/create',
+    name: 'CreateView',
+    component: CreateView
   },
+
   {
-    path:'/home',
-    name:'Home',
-    component: HomePage,
-    meta: { requiresAuth: true }
+    path: '/signup',
+    name: 'SignUpView',
+    component: SignUpView
   },
+
   {
-    path:'/movies/:movieId',
-    name:'movieDetail',
-    component: MovieDetail,
-    meta: { requiresAuth: true }
+    path: '/login',
+    name: 'LogInView',
+    component: LogInView
   },
+
   {
-    path:'/movies',
-    name:'movies',
-    component: MoviesView,
-    meta: { requiresAuth: true }
+    path: '/:id',
+    name: 'DetailView',
+    component: DetailView,
   },
+
   {
-    path:'/profile/:username',
-    name:'profile',
-    component: ProfileView,
-    meta: { requiresAuth: true }
+    path: '/:id/profile',
+    name: 'UserProfileView',
+    component: UserProfileView,
   },
+
   {
-    path:'/community',
-    name:'community',
-    component: CommunityBoard,
-    meta: { requiresAuth: true }
+    path: '/detailsearch',
+    name: 'DetailedSearchView',
+    component: DetailedSearchView,
   },
+
   {
-    path: '/community/create',
-    name: 'articleCreate',
-    component: ArticleCreate,
-    meta: { requiresAuth: true }
+    path: '/boxoffice',
+    name: 'BoxOfficeView',
+    component: BoxOfficeView,
   },
+
   {
-    path: '/community/:articlePk',
-    name: 'article',
-    component: ArticleView,
-    meta: { requiresAuth: true }
+    path: '/featured',
+    name: 'FeaturedMovieView',
+    component: FeaturedMovieView,
   },
+
   {
-    path: '/community/:articlePk/update',
-    name: 'ArticleUpdate',
-    component: ArticleUpdate,
-    meta: { requiresAuth: true }
+    path: '/community',
+    name: 'CommunityView',
+    component: CommunityView,
   },
+
+
 ]
 
 const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes
-})
-router.beforeEach((to, from, next) => {
-  // 여기서 'isLoggedIn'는 Vuex store의 getter나 state입니다.
-  const isLoggedIn = store.getters.isLoggedIn
-
-  // 로그인이 필요한 페이지에 대한 설정
-  const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
-
-  if (requiresAuth && !isLoggedIn) {
-    // 로그인이 필요하고 현재 로그인 상태가 아닌 경우
-    next('/intro')
-  } else {
-    // 그 외 경우는 정상적으로 라우트를 진행
-    next()
-  }
 })
 
 export default router
