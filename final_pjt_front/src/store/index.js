@@ -26,6 +26,7 @@ export default new Vuex.Store({
     movies:[],
     page:1,
     itemsperpage:10,
+    topRatedStartIndex:50,
 
   },
   getters: {
@@ -34,11 +35,22 @@ export default new Vuex.Store({
     },
   },
   mutations: {
-    SET_POPULAR_MOVIES(state, movies){
-      state.popularMovies = movies.slice(0,5)
+    SET_ALL_MOVIES(state,movies){
+      state.movies=movies;
     },
-    SET_TOP_RATED_MOVIES(state, movies){
-      state.topRatedMovies = movies.slice(0,5)
+    SET_POPULAR_MOVIES(state){
+      const start = (state.popularPage - 1) * 5;
+      
+      state.popularMovies = state.movies.sort((a,b)=>b.popularity - a.popularity).slice(start,start+5)
+      // state.popularMovies = movies.slice(0,5)
+    },
+    SET_TOP_RATED_MOVIES(state){
+      // const start = (state.topRatedPage - 1) * 5;
+      const start = state.topRatedStartIndex;
+      const end= start +5
+      state.topRatedMovies = state.movies.sort((a,b) => b.vote_average - a.vote_average).slice(start, end);
+      // state.topRatedMovies = state.movies.sort((a,b) => b.vote_average - a.vote_average).slice(start,start+5);
+      // state.topRatedMovies = movies.slice(0,5)
     },
     INCREMENT_POPULAR_PAGE(state) {
       state.popularPage += 1;
@@ -68,15 +80,9 @@ export default new Vuex.Store({
       state.movies = movies;
     },
     RESET_PAGE(state){
-      state.page=1;
+      state.popularPage=1;
+      state.topRatedPage=1;
     },
-    INCREMENT_PAGE(state){
-      if (state.page * state.itemsperpage < state.movies.length) {
-        state.page += 1;
-      } else {
-        state.page = 1;
-    }
-  },
 },
   actions: {
     nextPopularPage(context) {
@@ -115,12 +121,11 @@ export default new Vuex.Store({
       })
         .then((res) => {
           
-          const movies = res.data;
-          const popularMovies = [...movies].sort((a,b) => b.popularity - a.popularity)
-          const topRatedMovies = [...movies].sort((a,b) => b.vote_average - a.vote_average)
-          // context.commit('GET_MOVIES', res.data)
-          context.commit('SET_POPULAR_MOVIES', popularMovies.slice(0, 5));
-          context.commit('SET_TOP_RATED_MOVIES', topRatedMovies.slice(0, 5));
+          const movies = Array.isArray(res.data)?res.data:[];
+          context.commit('SET_ALL_MOVIES', movies)
+          context.commit('SET_POPULAR_MOVIES');
+          context.commit('SET_TOP_RATED_MOVIES');
+          context.commit('RESET_PAGE');
         })
         .catch((err) => {
           console.log(err)

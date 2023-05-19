@@ -36,6 +36,7 @@
         const action = title === 'Popular' ? 'previousPopularPage' : 'previousTopRatedPage';
         this.$store.dispatch(action);
       },
+      
     },
     mounted() {
       if (this.$store.state.popularMovies.length === 0 ){
