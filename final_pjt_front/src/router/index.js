@@ -9,7 +9,6 @@ import UserProfileView from '@/views/UserProfileView'
 import DetailedSearchView from '@/views/DetailedSearchView'
 import BoxOfficeView from '@/views/BoxOfficeView'
 import FeaturedMovieView from '@/views/FeaturedMovieView'
-// import CommunityView from '@/views/CommunityView'
 import HomeView from '@/views/HomeView'
 
 Vue.use(VueRouter)

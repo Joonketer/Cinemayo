@@ -26,7 +26,6 @@ export default {
 </script>
 
 <style scoped>
-.side-menu {
-    /* Add your styles here */
-}
+/* .side-menu {
+} */
 </style>

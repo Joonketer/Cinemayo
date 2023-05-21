@@ -1,45 +1,19 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
-import axios from 'axios'
-import createPersistedState from 'vuex-persistedstate'
 import router from '@/router'
 import djangourl from '@/urls/djangourl'
+import axios from 'axios'
 
-
-const API_URL = 'http://127.0.0.1:8000'
-
-
-Vue.use(Vuex)
-
-
-export default new Vuex.Store({
-  plugins: [
-    createPersistedState(),
-  ],
+export default {
   state: {
-    articles: [
-    ],
-    token: null,
-    popularMovies:[],
-    popularPage:1,
-    topRatedMovies:[],
-    topRatedPage:1,
-    movies:[],
-    page:1,
-    itemsperpage:10,
-    topRatedStartIndex:50,
-    state: {
-      token: localStorage.getItem('token') || '',
-      currentUser: {},
-      userProfile: {},
-      authError: null,
-    },
-
+    token: localStorage.getItem('token') || '',
+    currentUser: {},
+    userProfile: {},
+    authError: null,
   },
   getters: {
-    isLogin(state) {
-      return state.token ? true : false
+    isLoggedIn(state) {
+      return !!state.token
     },
+    //currentUser는 현재 로그인되어 있는 유저의 기본 정보
     currentUser(state) {
       return state.currentUser
     },
@@ -74,103 +48,9 @@ export default new Vuex.Store({
     },
     SET_AUTH_ERROR(state, error) {
       return state.authError = error
-    },
-    SET_ALL_MOVIES(state,movies){
-      state.movies=movies;
-    },
-    SET_POPULAR_MOVIES(state){
-      const start = (state.popularPage - 1) * 5;
-      
-      state.popularMovies = state.movies.sort((a,b)=>b.popularity - a.popularity).slice(start,start+5)
-      // state.popularMovies = movies.slice(0,5)
-    },
-    SET_TOP_RATED_MOVIES(state){
-      // const start = (state.topRatedPage - 1) * 5;
-      const start = state.topRatedStartIndex;
-      const end= start +5
-      state.topRatedMovies = state.movies.sort((a,b) => b.vote_average - a.vote_average).slice(start, end);
-      // state.topRatedMovies = state.movies.sort((a,b) => b.vote_average - a.vote_average).slice(start,start+5);
-      // state.topRatedMovies = movies.slice(0,5)
-    },
-    INCREMENT_POPULAR_PAGE(state) {
-      state.popularPage += 1;
-    },
-    DECREMENT_POPULAR_PAGE(state) {
-      if (state.popularPage > 1) {
-        state.popularPage -= 1;
-      }
-    },
-    INCREMENT_TOP_RATED_PAGE(state) {
-      state.topRatedPage += 1;
-    },
-    DECREMENT_TOP_RATED_PAGE(state) {
-      if (state.topRatedPage > 1) {
-        state.topRatedPage -= 1;
-      }
-    },
-    GET_ARTICLES(state, articles) {
-      state.articles = articles
-    },
-    // signup & login -> 완료하면 토큰 발급
-    SAVE_TOKEN(state, token) {
-      state.token = token
-      router.push({ name: 'ArticleView' }) // store/index.js $router 접근 불가 -> import를 해야함
-    },
-    GET_MOVIES(state, movies){
-      state.movies = movies;
-    },
-    RESET_PAGE(state){
-      state.popularPage=1;
-      state.topRatedPage=1;
-    },
-},
+    }
+  },
   actions: {
-    nextPopularPage(context) {
-      context.commit('INCREMENT_POPULAR_PAGE');
-      context.dispatch('getMovies');
-    },
-    previousPopularPage(context) {
-      context.commit('DECREMENT_POPULAR_PAGE');
-      context.dispatch('getMovies');
-    },
-    nextTopRatedPage(context) {
-      context.commit('INCREMENT_TOP_RATED_PAGE');
-      context.dispatch('getMovies');
-    },
-    previousTopRatedPage(context) {
-      context.commit('DECREMENT_TOP_RATED_PAGE');
-      context.dispatch('getMovies');
-    },
-    getArticles(context) {
-      axios({
-        method: 'get',
-        url: `${API_URL}/api/v1/movies/`,
-      })
-        .then((res) => {
-          // console.log(res, context)
-          context.commit('GET_ARTICLES', res.data)
-        })
-        .catch((err) => {
-          console.log(err)
-        })
-    },
-    getMovies(context) {
-      axios({
-        method: 'get',
-        url: `${API_URL}/api/v1/movies/`,
-      })
-        .then((res) => {
-          
-          const movies = Array.isArray(res.data)?res.data:[];
-          context.commit('SET_ALL_MOVIES', movies)
-          context.commit('SET_POPULAR_MOVIES');
-          context.commit('SET_TOP_RATED_MOVIES');
-          context.commit('RESET_PAGE');
-        })
-        .catch((err) => {
-          console.log(err)
-        })
-    },
     setToken({commit}, token){
       commit('SET_TOKEN', token)
       console.log('setToken완료')
@@ -203,6 +83,24 @@ export default new Vuex.Store({
         commit('SET_AUTH_ERROR', err.response.data)
       })
     },
+
+    // userDelete({getters, dispatch}, username){
+    //   if (confirm('정말로 탈퇴하시겠습니까?')){
+    //     axios({
+    //       url: djangourl.accounts.userDelete(username),
+    //       method: 'delete',
+    //       headers: getters.authHeader
+    //     })
+    //       .then((msg) => {
+    //         dispatch('removeToken')
+    //         alert(msg.delete_message)
+    //         router.push({name: 'home'})
+    //       })
+    //       .catch(err => {
+    //         console.error(err.response.data)
+    //       })      
+    //   }
+    // },
     login({commit, dispatch, getters}, credentials){
       console.log('login에서', credentials)
       axios({
@@ -294,44 +192,6 @@ export default new Vuex.Store({
         console.error(err.response)
       })
     },
-    // signUp(context, payload) {
-    //   const username = payload.username
-    //   const password1 = payload.password1
-    //   const password2 = payload.password2
-
-    //   axios({
-    //     method: 'post',
-    //     url: `${API_URL}/accounts/signup/`,
-    //     data: {
-    //       username, password1, password2
-    //     }
-    //   })
-    //     .then((res) => {
-    //       // console.log(res)
-    //       // context.commit('SIGN_UP', res.data.key)
-    //       context.commit('SAVE_TOKEN', res.data.key)
-    //     })
-    //     .catch((err) => {
-    //       console.log(err)
-    //     })
-    // },
-    // login(context, payload) {
-    //   const username = payload.username
-    //   const password = payload.password
-
-    //   axios({
-    //     method: 'post',
-    //     url: `${API_URL}/accounts/login/`,
-    //     data: {
-    //       username, password
-    //     }
-    //   })
-    //     .then((res) => {
-    //       context.commit('SAVE_TOKEN', res.data.key)
-    //     })
-    //     .catch((err) => console.log(err))
-    // }
   },
-  modules: {
-  }
-})
+
+}
