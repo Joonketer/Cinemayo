@@ -1,7 +1,13 @@
 <template>
   <div class="article-list">
     <h3>마지막 클릭한 사진과 관련된 정보</h3>
+<<<<<<< HEAD
     <div v-if="isLoading">Loading...</div>
+=======
+    <div v-if="isLoading">
+      Loading...
+    </div>
+>>>>>>> d8ba60fa191151f048faebce21518bb32c770dec
     <div v-else>
       <div v-if="lastClickedPhoto">
         <p>{{ lastClickedPhoto.movie }}</p>
@@ -10,6 +16,7 @@
       <div v-if="movie_list">
         <div v-for="movie in movie_list" :key="movie.id">
           {{ movie.title }}
+<<<<<<< HEAD
           {{ movie.id }}
           <div v-if="movie_detail">
             <router-link
@@ -33,6 +40,17 @@
             />
           </div>
         </div>
+=======
+          <router-link
+      :to="{
+        name: 'DetailView',
+        params: { id: movie.movie_id },
+      }" >
+          <img :src="getBackdropUrl(movie.poster_path)" alt="Backdrop Image" />
+          </router-link>
+        </div>
+
+>>>>>>> d8ba60fa191151f048faebce21518bb32c770dec
       </div>
     </div>
   </div>
@@ -50,7 +68,10 @@ export default {
       lastClickedPhoto: null,
       Movies_title: null,
       movie_list: null,
+<<<<<<< HEAD
       movie_detail: null,
+=======
+>>>>>>> d8ba60fa191151f048faebce21518bb32c770dec
     };
   },
   mounted() {
@@ -60,6 +81,7 @@ export default {
     ...mapState(["token"]),
   },
   methods: {
+<<<<<<< HEAD
     fetchDetail(movie_id) {
       const API_URL = `https://api.themoviedb.org/3/movie/${movie_id}?language=ko-kor`;
 
@@ -83,14 +105,20 @@ export default {
           console.error("Error fetching movie:", error);
         });
     },
+=======
+>>>>>>> d8ba60fa191151f048faebce21518bb32c770dec
     fetchSearch() {
       console.log(this.Movies_title);
       const API_URL = `https://api.themoviedb.org/3/search/movie?query=${this.Movies_title}&include_adult=false&language=ko-KOR&page=1`;
 
       const headers = {
         accept: "application/json",
+<<<<<<< HEAD
         Authorization:
           "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIzYTRmODVmMDA1ZDExODVkNjg3Y2Q1ZjE3NTRjY2MyZCIsInN1YiI6IjYzZDIyZDFiY2I3MWI4MDA3YzFiOGNlYyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.zwYescz-jNoCc_X2jDOxOz90oofdYLmxwwkH5XuDmGs",
+=======
+        Authorization: "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIzYTRmODVmMDA1ZDExODVkNjg3Y2Q1ZjE3NTRjY2MyZCIsInN1YiI6IjYzZDIyZDFiY2I3MWI4MDA3YzFiOGNlYyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.zwYescz-jNoCc_X2jDOxOz90oofdYLmxwwkH5XuDmGs",
+>>>>>>> d8ba60fa191151f048faebce21518bb32c770dec
       };
 
       axios
@@ -123,10 +151,14 @@ export default {
           this.isLoading = false;
         })
         .catch((error) => {
+<<<<<<< HEAD
           console.error(
             "최근 클릭한 사진을 가져오는 중 오류가 발생했습니다:",
             error
           );
+=======
+          console.error("최근 클릭한 사진을 가져오는 중 오류가 발생했습니다:", error);
+>>>>>>> d8ba60fa191151f048faebce21518bb32c770dec
           this.isLoading = false;
         });
     },
@@ -159,7 +191,11 @@ export default {
 ul {
   margin-left: 1rem;
 }
+<<<<<<< HEAD
 img {
+=======
+img{
+>>>>>>> d8ba60fa191151f048faebce21518bb32c770dec
   width: 100px;
   height: 100px;
 }
