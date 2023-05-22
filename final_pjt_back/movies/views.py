@@ -1,8 +1,11 @@
+from rest_framework.decorators import api_view, permission_classes
+from django.http import QueryDict
 from django.shortcuts import render
 from .models import Movie, Review, Photo
 
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
+from django.views.decorators.csrf import csrf_exempt
 
 from rest_framework.decorators import permission_classes
 from rest_framework.permissions import IsAuthenticated
@@ -10,14 +13,26 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 from django.shortcuts import get_object_or_404, get_list_or_404
 from .serializers import MovieListSerializer, MovieSerializer, ReviewListSerializer, ReviewSerializer, PhotoSerializer
-
+from django.http import JsonResponse
 from django.db.models import Q
 # Create your views here.
+
+# 영화 존재 여부
+
+
+def check_if_movie_exists(request, movie_id):
+    try:
+        movie = Movie.objects.get(id=movie_id)
+        exists = True
+    except Movie.DoesNotExist:
+        exists = False
+
+    return JsonResponse({"exists": exists})
 
 # 전체 영화
 
 
-@api_view(['GET',])
+@api_view(['GET', 'POST'])
 # @permission_classes([IsAuthenticated])
 def movie_list(request):
     if request.method == 'GET':
@@ -26,6 +41,12 @@ def movie_list(request):
         serializer = MovieListSerializer(movies, many=True)
         # print(serializer.data)
         return Response(serializer.data)
+    elif request.method == 'POST':
+        serializer = MovieSerializer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+            # serializer.save(user=request.user)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 # 영화 상세
 
@@ -84,17 +105,6 @@ def review_create(request, movie_pk):
         serializer.save(movie=movie, user=request.user)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-
-@api_view(['POST'])
-@permission_classes([IsAuthenticated])
-def review_create_search(request):
-    serializer = ReviewSerializer(data=request.data)
-    if serializer.is_valid(raise_exception=True):
-        serializer.save(user=request.user)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
 # 영화 좋아요
 
 
@@ -145,7 +155,8 @@ def handle_clicked_photo(request):
                 photo_count = Photo.objects.filter(user=user).count()
                 if photo_count >= 10:
                     # 가장 처음에 저장된 클릭 데이터 삭제
-                    oldest_photo = Photo.objects.filter(user=user).order_by('clicked_at').first()
+                    oldest_photo = Photo.objects.filter(
+                        user=user).order_by('clicked_at').first()
                     oldest_photo.delete()
 
                 serializer.save(user=user)
@@ -156,7 +167,6 @@ def handle_clicked_photo(request):
             return Response({'message': 'User authentication required.'}, status=401)
     elif request.method == 'GET':
         # 마지막으로 클릭한 사진과 관련된 정보를 가져오는 코드
-<<<<<<< HEAD
         last_clicked_photo = Photo.objects.filter(
             user_id=request.user.id).order_by('-clicked_at').first()
         print(request.user.id)
@@ -171,36 +181,15 @@ def handle_clicked_photo(request):
             # 마지막으로 클릭한 사진이 없는 경우에 대한 처리
             return Response({'message': 'No last clicked photo found.'}, status=404)
 
-=======
-            last_clicked_photo = Photo.objects.filter(user_id=request.user.id).order_by('-clicked_at').first()
-            print(request.user.id)
-            if last_clicked_photo:
-                # 마지막으로 클릭한 사진과 관련된 영화를 추천하는 코드
-                photos = Photo.objects.filter(user_id=last_clicked_photo.user_id)
-                # 나머지 코드 추가
-
-                serializer = PhotoSerializer(photos, many=True)
-                return Response(serializer.data, status=200)
-            else:
-                # 마지막으로 클릭한 사진이 없는 경우에 대한 처리
-                return Response({'message': 'No last clicked photo found.'}, status=404)
-        
->>>>>>> d8ba60fa191151f048faebce21518bb32c770dec
 
 # 장르 추천
 def getMoviesByGenre(genre):
     # print(genre)
-<<<<<<< HEAD
     movies = Movie.objects.filter(
         genre_ids__in=[genre]).order_by('-popularity')[:10]
     return movies
 
 
-=======
-    movies = Movie.objects.filter(genre_ids__in=[genre]).order_by('-popularity')[:10]
-    return movies
-
->>>>>>> d8ba60fa191151f048faebce21518bb32c770dec
 @api_view(['GET'])
 def movie_genre(request, genre_id):
     if genre_id:
@@ -212,20 +201,14 @@ def movie_genre(request, genre_id):
     return Response(serializer.data)
 
 # 장르 추천
-<<<<<<< HEAD
 
 
-=======
->>>>>>> d8ba60fa191151f048faebce21518bb32c770dec
 def getMoviesByMovie(movie):
     # print(genre)
     movies = Movie.objects.filter(movie_id=movie)
     return movies
 
-<<<<<<< HEAD
 
-=======
->>>>>>> d8ba60fa191151f048faebce21518bb32c770dec
 @api_view(['GET'])
 def movie_movie(request, movie_id):
     if movie_id:

@@ -1,13 +1,7 @@
 <template>
   <div class="article-list">
     <h3>마지막 클릭한 사진과 관련된 정보</h3>
-<<<<<<< HEAD
     <div v-if="isLoading">Loading...</div>
-=======
-    <div v-if="isLoading">
-      Loading...
-    </div>
->>>>>>> d8ba60fa191151f048faebce21518bb32c770dec
     <div v-else>
       <div v-if="lastClickedPhoto">
         <p>{{ lastClickedPhoto.movie }}</p>
@@ -16,21 +10,13 @@
       <div v-if="movie_list">
         <div v-for="movie in movie_list" :key="movie.id">
           {{ movie.title }}
-<<<<<<< HEAD
           {{ movie.id }}
           <div v-if="movie_detail">
-            <router-link
-              :to="{
-                name: 'DetailSearchView',
-                params: { id: movie.id },
-                query: { movieDetail: JSON.stringify(movie_detail) },
-              }"
-            >
-              <img
-                :src="getBackdropUrl(movie.poster_path)"
-                alt="Backdrop Image"
-              />
-            </router-link>
+            <img
+              :src="getBackdropUrl(movie.poster_path)"
+              alt="Backdrop Image"
+              @click="fetchDetail(movie.id)"
+            />
           </div>
           <div v-else>
             <img
@@ -40,17 +26,6 @@
             />
           </div>
         </div>
-=======
-          <router-link
-      :to="{
-        name: 'DetailView',
-        params: { id: movie.movie_id },
-      }" >
-          <img :src="getBackdropUrl(movie.poster_path)" alt="Backdrop Image" />
-          </router-link>
-        </div>
-
->>>>>>> d8ba60fa191151f048faebce21518bb32c770dec
       </div>
     </div>
   </div>
@@ -65,13 +40,10 @@ export default {
   data() {
     return {
       isLoading: true,
-      lastClickedPhoto: null,
-      Movies_title: null,
+      lastClickedPhoto: {},
+      Movies_title: "",
       movie_list: null,
-<<<<<<< HEAD
       movie_detail: null,
-=======
->>>>>>> d8ba60fa191151f048faebce21518bb32c770dec
     };
   },
   mounted() {
@@ -81,7 +53,6 @@ export default {
     ...mapState(["token"]),
   },
   methods: {
-<<<<<<< HEAD
     fetchDetail(movie_id) {
       const API_URL = `https://api.themoviedb.org/3/movie/${movie_id}?language=ko-kor`;
 
@@ -98,27 +69,36 @@ export default {
           console.log("영화 디테일");
           console.log(this.movie_detail);
 
-          // 영화 정보를 가져온 후에 router-link를 사용하여 이미지를 렌더링합니다.
-          // 이로써 movie.id가 null이 되지 않습니다.
+          // 영화가 데이터베이스에 존재하는지 확인합니다.
+          this.checkIfMovieExists(movie_id)
+            .then((exists) => {
+              if (!exists) {
+                // 영화가 데이터베이스에 존재하지 않는 경우, 데이터베이스에 추가합니다.
+                this.addMovieToDatabase(movie_id);
+              } else {
+                // 영화가 이미 존재하는 경우, 상세 보기로 이동합니다.
+                this.navigateToDetail(movie_id);
+              }
+            })
+            .catch((error) => {
+              console.error(
+                "영화 존재 여부 확인 중 오류가 발생했습니다:",
+                error
+              );
+            });
         })
         .catch((error) => {
-          console.error("Error fetching movie:", error);
+          console.error("영화를 가져오는 중 오류가 발생했습니다:", error);
         });
     },
-=======
->>>>>>> d8ba60fa191151f048faebce21518bb32c770dec
     fetchSearch() {
       console.log(this.Movies_title);
       const API_URL = `https://api.themoviedb.org/3/search/movie?query=${this.Movies_title}&include_adult=false&language=ko-KOR&page=1`;
 
       const headers = {
         accept: "application/json",
-<<<<<<< HEAD
         Authorization:
           "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIzYTRmODVmMDA1ZDExODVkNjg3Y2Q1ZjE3NTRjY2MyZCIsInN1YiI6IjYzZDIyZDFiY2I3MWI4MDA3YzFiOGNlYyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.zwYescz-jNoCc_X2jDOxOz90oofdYLmxwwkH5XuDmGs",
-=======
-        Authorization: "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIzYTRmODVmMDA1ZDExODVkNjg3Y2Q1ZjE3NTRjY2MyZCIsInN1YiI6IjYzZDIyZDFiY2I3MWI4MDA3YzFiOGNlYyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.zwYescz-jNoCc_X2jDOxOz90oofdYLmxwwkH5XuDmGs",
->>>>>>> d8ba60fa191151f048faebce21518bb32c770dec
       };
 
       axios
@@ -140,6 +120,8 @@ export default {
         .get(API_URL, { headers: { Authorization: `Token ${this.token}` } })
         .then((response) => {
           const photos = response.data;
+          console.log("포토", photos);
+          console.log("포토", photos.length);
           if (photos.length > 0) {
             this.lastClickedPhoto = photos[0];
             console.log(photos[0]);
@@ -151,14 +133,10 @@ export default {
           this.isLoading = false;
         })
         .catch((error) => {
-<<<<<<< HEAD
           console.error(
             "최근 클릭한 사진을 가져오는 중 오류가 발생했습니다:",
             error
           );
-=======
-          console.error("최근 클릭한 사진을 가져오는 중 오류가 발생했습니다:", error);
->>>>>>> d8ba60fa191151f048faebce21518bb32c770dec
           this.isLoading = false;
         });
     },
@@ -183,6 +161,44 @@ export default {
       const baseUrl = "https://image.tmdb.org/t/p/original";
       return `${baseUrl}${backdropPath}`;
     },
+    checkIfMovieExists(movie_id) {
+      // 주어진 ID의 영화가 데이터베이스에 존재하는지 확인하기 위해 API 요청을 수행합니다.
+      const API_URL = `http://127.0.0.1:8000/api/v1/movies/${movie_id}/exists/`;
+
+      return axios
+        .get(API_URL)
+        .then((response) => {
+          const movieData = response.data;
+          console.log("영화 데이터:", movieData);
+          return movieData !== null; // 영화가 존재하는 경우 true를 반환하고, 그렇지 않은 경우 false를 반환합니다.
+        })
+        .catch((error) => {
+          console.error("영화 존재 여부 확인 중 오류가 발생했습니다:", error);
+        });
+    },
+    addMovieToDatabase(movie_id) {
+      // 데이터베이스에 영화를 추가하기 위해 API 요청을 수행합니다.
+      const API_URL = `http://127.0.0.1:8000/api/v1/movies/`;
+
+      const movieData = {
+        movie_id: movie_id,
+        // 필요한 다른 영화 정보도 추가할 수 있습니다.
+      };
+
+      axios
+        .post(API_URL, movieData)
+        .then(() => {
+          console.log("영화를 데이터베이스에 추가했습니다.");
+          this.navigateToDetail(movie_id);
+        })
+        .catch((error) => {
+          console.error("영화 추가 중 오류가 발생했습니다:", error);
+        });
+    },
+    navigateToDetail(movie_id) {
+      // 영화의 상세 보기(detail view)로 이동합니다.
+      this.$router.push({ name: "DetailView", params: { id: movie_id } });
+    },
   },
 };
 </script>
@@ -191,11 +207,7 @@ export default {
 ul {
   margin-left: 1rem;
 }
-<<<<<<< HEAD
 img {
-=======
-img{
->>>>>>> d8ba60fa191151f048faebce21518bb32c770dec
   width: 100px;
   height: 100px;
 }
