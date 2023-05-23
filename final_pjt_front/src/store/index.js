@@ -15,10 +15,8 @@ export default new Vuex.Store({
     createPersistedState(),
   ],
   state: {
-    articles: [
-    ],
+    articles: [],
     photos: [],
-
     token: null,
     username: null,
     user_pk: null,
@@ -31,6 +29,7 @@ export default new Vuex.Store({
     page: 1,
     itemsperpage: 10,
     topRatedStartIndex: 50,
+    likedMovies: [],
   },
   getters: {
     isLogin(state) {
@@ -39,6 +38,7 @@ export default new Vuex.Store({
     }
   },
   mutations: {
+
     GET_ARTICLES(state, articles) {
       state.articles = articles
     },
@@ -51,8 +51,9 @@ export default new Vuex.Store({
 
       router.push({ name: 'ArticleView' }) // store/index.js $router 접근 불가 -> import를 해야함
     },
-    SAVE_USRE_INFO(state, info) {
+    SAVE_USER_INFO(state, info) {
       state.userinfo = info;
+      // state.username = info.username;
     },
     SET_ALL_MOVIES(state, movies) {
       state.movies = movies;
@@ -89,6 +90,7 @@ export default new Vuex.Store({
     },
   },
   actions: {
+
     nextPopularPage(context) {
       context.commit('INCREMENT_POPULAR_PAGE');
       context.dispatch('getMovies');
@@ -123,15 +125,16 @@ export default new Vuex.Store({
         })
     },
     getMyProfile(context) {
+      console.log('이름', context.state.userinfo.username)
       axios({
         method: 'get',
-        url: `${API_URL}/profile/me/`,
+        url: `${API_URL}/profile/${context.state.userinfo.username}/`,
         headers: {
           Authorization: `Token ${context.state.token}`
         }
       })
         .then((res) => {
-          console.log(res)
+          console.log('유저', res)
           context.commit('SAVE_USER_INFO', res.data)
           // res.data 인지 확인 하기, userprofile 만들기
           // action만들고, action커밋하고, 
@@ -199,11 +202,12 @@ export default new Vuex.Store({
       })
         .then((res) => {
           context.commit('SAVE_TOKEN', res.data.key)
+          context.dispatch('saveUserInfo', res.data.key);
         })
     },
     logout(context) {
       context.commit('SAVE_TOKEN', null);
-      // context.commit('SAVE_USRE_INFO', { username: null, pk: null });
+      // context.commit('SAVE_USER_INFO', { username: null, pk: null });
     },
     saveUserInfo(context, payload) {
       axios({
@@ -214,8 +218,8 @@ export default new Vuex.Store({
         }
       })
         .then((res) => {
-          console.log(res.data)
-          context.commit('SAVE_USRE_INFO', res.data)
+          console.log('유저프로픽', res.data)
+          context.commit('SAVE_USER_INFO', res.data)
         })
     },
     // fetchCurrentUser(context) {

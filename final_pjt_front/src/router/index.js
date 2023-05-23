@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import HomeView from '@/views/HomeView'
 import ArticleView from '@/views/ArticleView'
 import CreateView from '@/views/CreateView'
 import DetailView from '@/views/DetailView'
@@ -19,6 +20,12 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '/',
+    name: 'HomeView',
+    component: HomeView
+  },
+
+  {
+    path: '/totalmovie',
     name: 'ArticleView',
     component: ArticleView
   },
@@ -47,11 +54,7 @@ const routes = [
     component: LogInView
   },
 
-  {
-    path: '/:id',
-    name: 'DetailView',
-    component: DetailView,
-  },
+
 
   {
     path: '/search/:id',
@@ -94,6 +97,12 @@ const routes = [
     name: 'CommunityArticleDetailView',
     component: CommunityArticleDetailView,
     props: true
+  },
+
+  {
+    path: '/:id',
+    name: 'DetailView',
+    component: DetailView,
   },
 
 ]
