@@ -18,7 +18,7 @@ from .serializers import BoardListSerializer, BoardSerializer, CommentListSerial
 def index(reqeust):
     # 모든 게시글
     if reqeust.method == 'GET':
-        boards = Board.objects.all()
+        boards = Board.objects.all().order_by('-created_at')
         serializer = BoardListSerializer(boards, many=True)
         return Response(serializer.data)
     # 게시글 생성
