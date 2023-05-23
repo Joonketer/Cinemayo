@@ -8,6 +8,11 @@ import SignUpView from '@/views/SignUpView'
 import LogInView from '@/views/LogInView'
 import RecommendView from '@/views/RecommendView'
 import SearchView from '@/views/SearchView'
+import ProfileView from '@/views/ProfileView'
+import BoxOfficeView from '@/views/BoxOfficeView'
+import TagSearchView from '@/views/TagSearchView'
+import CommunityView from '@/views/CommunityView'
+import CommunityArticleDetailView from '@/views/CommunityArticleDetailView.vue'
 
 Vue.use(VueRouter)
 
@@ -60,6 +65,36 @@ const routes = [
     component: SearchView,
   },
 
+  {
+    path: '/boxoffice',
+    name: 'BoxOfficeView',
+    component: BoxOfficeView,
+  },
+
+  {
+    path: '/tagsearch',
+    name: 'TagSearchView',
+    component: TagSearchView,
+  },
+
+  {
+    path: '/proflie/me',
+    name: 'ProfileView',
+    component: ProfileView,
+  },
+
+  {
+    path: '/community',
+    name: 'CommunityView',
+    component: CommunityView,
+  },
+
+  {
+    path: '/community/boards/:id',
+    name: 'CommunityArticleDetailView',
+    component: CommunityArticleDetailView,
+    props: true
+  },
 
 ]
 
