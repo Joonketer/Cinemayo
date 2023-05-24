@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <nav>
+      <router-link :to="{ name: 'HomeView' }">HomeView</router-link> |
       <router-link :to="{ name: 'ArticleView' }">Articles</router-link> |
       <router-link :to="{ name: 'SignUpView' }">SignUpPage</router-link> |
       <router-link :to="{ name: 'LogInView' }">LogInPage</router-link> |
@@ -44,6 +45,14 @@ export default {
       return this.$store.state.userinfo; // 현재 로그인된 회원의 정보를 가져옴
     },
   },
+  watch: {
+    $route(to, from) {
+      if (to.name === from.name && to.fullPath === from.fullPath) {
+        // 동일한 페이지로 중첩 라우팅된 경우
+        this.navigateToSearchView();
+      }
+    },
+  },
   methods: {
     logout() {
       this.$store
@@ -51,7 +60,9 @@ export default {
         .then(() => {
           // 로그아웃 성공 시 처리할 내용을 작성합니다.
           // 예: 로그인 페이지로 이동
-          this.$router.push({ name: "LogInView" });
+          if (this.$route.name !== "LogInView") {
+            this.$router.push({ name: "LogInView" });
+          }
         })
         .catch((error) => {
           console.error("로그아웃 중 오류 발생:", error);

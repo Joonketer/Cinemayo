@@ -15,6 +15,7 @@ import BoxOfficeView from '@/views/BoxOfficeView'
 import TagSearchView from '@/views/TagSearchView'
 import CommunityView from '@/views/CommunityView'
 import CommunityArticleDetailView from '@/views/CommunityArticleDetailView.vue'
+import CommunityArticleUpdateView from '@/views/CommunityArticleUpdateView.vue'
 
 Vue.use(VueRouter)
 
@@ -104,6 +105,14 @@ const routes = [
     path: '/community/boards/:id',
     name: 'CommunityArticleDetailView',
     component: CommunityArticleDetailView,
+    props: true
+  },
+
+
+  {
+    path: '/community/boards/update/:id',
+    name: 'CommunityArticleUpdateView',
+    component: CommunityArticleUpdateView,
     props: true
   },
 

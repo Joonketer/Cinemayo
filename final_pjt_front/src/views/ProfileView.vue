@@ -1,10 +1,6 @@
 <template>
   <div class="profile">
     <h1>{{ userinfo.username }}님의 사용자 프로필</h1>
-    <button v-if="isLogin && !isFollowing" @click="followUser">팔로우</button>
-    <button v-if="isLogin && isFollowing" @click="unfollowUser">
-      언팔로우
-    </button>
     <hr />
     <p>{{ userinfo.username }}님의 팔로잉: {{ userinfo.followings }}</p>
     <hr />
@@ -48,30 +44,7 @@ export default {
   created() {
     this.$store.dispatch("getMyProfile");
   },
-  methods: {
-    followUser() {
-      this.$store
-        .dispatch("followUser", this.username)
-        .then(() => {
-          console.log("유저를 팔로우했습니다.");
-          this.$store.commit("SET_FOLLOWING", true); // 팔로우 상태 변경
-        })
-        .catch((error) => {
-          console.error("유저 팔로우 중 오류가 발생했습니다.", error);
-        });
-    },
-    unfollowUser() {
-      this.$store
-        .dispatch("unfollowUser", this.username)
-        .then(() => {
-          console.log("유저를 언팔로우했습니다.");
-          this.$store.commit("SET_FOLLOWING", false); // 팔로우 상태 변경
-        })
-        .catch((error) => {
-          console.error("유저 언팔로우 중 오류가 발생했습니다.", error);
-        });
-    },
-  },
+  methods: {},
 };
 </script>
 

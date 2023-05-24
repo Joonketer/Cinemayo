@@ -196,7 +196,6 @@ export default new Vuex.Store({
           context.commit('SET_ALL_MOVIES', movies)
           context.commit('SET_POPULAR_MOVIES');
           context.commit('SET_TOP_RATED_MOVIES');
-          context.commit('RESET_PAGE');
         })
         .catch((err) => {
           console.log(err)

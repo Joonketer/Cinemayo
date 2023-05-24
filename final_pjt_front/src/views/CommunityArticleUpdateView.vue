@@ -1,9 +1,7 @@
-<!-- views/UpdateView.vue -->
-
 <template>
   <div>
     <h1>게시글 수정</h1>
-    <form @submit.prevent="updateArticle">
+    <form @submit.prevent="updateBoard">
       <label for="title">제목 : </label>
       <input type="text" id="title" v-model.trim="title" /><br />
       <label for="content">내용 : </label>
@@ -14,7 +12,7 @@
   </div>
 </template>
   
-  <script>
+<script>
 import axios from "axios";
 import { mapState } from "vuex";
 const API_URL = "http://127.0.0.1:8000";
@@ -38,7 +36,7 @@ export default {
     const id = this.$route.params.id;
     axios({
       method: "get",
-      url: `${API_URL}/api/v1/articles/${id}/`,
+      url: `${API_URL}/api/v1/community/boards/${id}/`,
     })
       .then((res) => {
         this.title = res.data.title;
@@ -56,20 +54,20 @@ export default {
         alert("로그인이 필요한 페이지입니다...");
         this.$router.push({ name: "LogInView" });
       }
-
-      // 로그인이 되어 있으면 getArticles action 실행
-      // 로그인 X라면 login 페이지로 이동
     },
-    updateArticle() {
+    updateBoard() {
       const id = this.$route.params.id;
       axios({
-        method: "put",
-        url: `${API_URL}/api/v1/articles/${id}/`,
+        method: "PUT",
+        url: `${API_URL}/api/v1/community/boards/${id}/`,
         data: { title: this.title, content: this.content },
         headers: { Authorization: `Token ${this.token}` },
       })
         .then(() => {
-          this.$router.push({ name: "DetailView", params: { id: id } });
+          this.$router.push({
+            name: "CommunityArticleDetailView",
+            params: { id: id },
+          });
         })
         .catch((err) => {
           console.log(err);
@@ -78,4 +76,3 @@ export default {
   },
 };
 </script>
-  

@@ -9,7 +9,10 @@
     <p>장르: {{ article?.genre_ids }}</p>
     <p>
       포스터:
-      <img :src="getBackdropUrl(article?.poster_path)" alt="Backdrop Image" />
+      <img
+        :src="getBackdropUrl(article?.poster_path || article?.backdrop_path)"
+        alt="Backdrop Image"
+      />
     </p>
     <!-- 영화 좋아요 버튼 -->
     <button @click="likeMovie(article.id)">

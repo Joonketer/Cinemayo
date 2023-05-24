@@ -7,14 +7,14 @@
         {{ movie.id }}
         <div v-if="movie_detail">
           <img
-            :src="getBackdropUrl(movie.poster_path)"
+            :src="getBackdropUrl(movie.poster_path || movie.backdrop_path)"
             alt="Backdrop Image"
             @click="checkMovieExistence(movie)"
           />
         </div>
         <div v-else>
           <img
-            :src="getBackdropUrl(movie.poster_path)"
+            :src="getBackdropUrl(movie.poster_path || movie.backdrop_path)"
             alt="Backdrop Image"
             @click="checkMovieExistence(movie)"
           />
