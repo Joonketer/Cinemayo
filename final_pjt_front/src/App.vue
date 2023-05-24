@@ -9,7 +9,7 @@
       <router-link
         :to="{
           name: 'ProfileView',
-          params: { username: currentUser.username },
+          params: { username: currentUser.username || '' },
         }"
         >내 프로필</router-link
       >

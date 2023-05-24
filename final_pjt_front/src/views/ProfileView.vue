@@ -2,9 +2,9 @@
   <div class="profile">
     <h1>{{ userinfo.username }}님의 사용자 프로필</h1>
     <hr />
-    <p>{{ userinfo.username }}님의 팔로잉: {{ userinfo.followings }}</p>
+    <p>{{ userinfo.username }}님의 팔로잉: {{ userinfo.followings.length }}</p>
     <hr />
-    <p>{{ userinfo.username }}님의 팔로워: {{ userinfo.followers }}</p>
+    <p>{{ userinfo.username }}님의 팔로워: {{ userinfo.followers.length }}</p>
     <hr />
     <p>{{ userinfo.username }}님의 좋아요 수: {{ userinfo.like_boards }}</p>
     <hr />
