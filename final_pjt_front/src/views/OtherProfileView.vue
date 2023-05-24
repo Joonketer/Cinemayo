@@ -1,27 +1,38 @@
 <template>
   <div class="profile">
-    <h1>{{ userinfo.username }}님의 사용자 프로필</h1>
+    <h1>{{ profileInfo.username }}님의 사용자 프로필</h1>
     <button v-if="isLogin && !isFollowing" @click="followUser">팔로우</button>
     <button v-if="isLogin && isFollowing" @click="unfollowUser">
       언팔로우
     </button>
     <hr />
-    <p>{{ userinfo.username }}님의 팔로잉: {{ userinfo.followings }}</p>
-    <hr />
-    <p>{{ userinfo.username }}님의 팔로워: {{ userinfo.followers }}</p>
-    <hr />
-    <p>{{ userinfo.username }}님의 좋아요 수: {{ userinfo.like_boards }}</p>
-    <hr />
-    <p>{{ userinfo.username }}님의 게시물 수: {{ userinfo.boards }}</p>
-    <hr />
+
     <p>
-      {{ userinfo.username }}님의 좋아요 댓글 수: {{ userinfo.like_comments }}
+      {{ profileInfo.username }}님의 팔로잉 수:
+      {{ profileInfo.followings.length }}명
     </p>
     <hr />
-    <p>{{ userinfo.username }}님의 댓글 수: {{ userinfo.comments }}</p>
+    <p>
+      {{ profileInfo.username }}님의 팔로워 수:
+      {{ profileInfo.followers.length }}명
+    </p>
     <hr />
     <p>
-      {{ userinfo.username }}님의 좋아요 영화 수: {{ userinfo.like_movies }}
+      {{ profileInfo.username }}님의 좋아요 수: {{ profileInfo.like_boards }}
+    </p>
+    <hr />
+    <p>{{ profileInfo.username }}님의 게시물 수: {{ profileInfo.boards }}</p>
+    <hr />
+    <p>
+      {{ profileInfo.username }}님의 좋아요 댓글 수:
+      {{ profileInfo.like_comments }}
+    </p>
+    <hr />
+    <p>{{ profileInfo.username }}님의 댓글 수: {{ profileInfo.comments }}</p>
+    <hr />
+    <p>
+      {{ profileInfo.username }}님의 좋아요 영화 수:
+      {{ profileInfo.like_movies }}
     </p>
   </div>
 </template>
@@ -41,12 +52,12 @@ export default {
       return this.$store.getters.isLogin;
     },
     isFollowing() {
-      return this.userinfo && this.userinfo.following === true;
+      return this.profileInfo && this.profileInfo.following;
     },
-    ...mapState(["userinfo"]),
+    ...mapState(["profileInfo"]),
   },
   created() {
-    this.$store.dispatch("getMyProfile");
+    this.$store.dispatch("getUserProfile", this.username);
   },
   methods: {
     followUser() {

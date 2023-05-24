@@ -10,6 +10,7 @@ import LogInView from '@/views/LogInView'
 import RecommendView from '@/views/RecommendView'
 import SearchView from '@/views/SearchView'
 import ProfileView from '@/views/ProfileView'
+import OtherProfileView from '@/views/OtherProfileView'
 import BoxOfficeView from '@/views/BoxOfficeView'
 import TagSearchView from '@/views/TagSearchView'
 import CommunityView from '@/views/CommunityView'
@@ -81,9 +82,16 @@ const routes = [
   },
 
   {
-    path: '/proflie/me',
+    path: '/profile/me',
     name: 'ProfileView',
     component: ProfileView,
+    props: true
+  },
+  {
+    path: '/profile/:username',
+    name: 'OtherProfileView',
+    component: OtherProfileView,
+    props: true
   },
 
   {
