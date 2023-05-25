@@ -1,36 +1,29 @@
 <template>
-  <div class="container">
+    <div class="container">
     <h1>Movie Detail</h1>
     <div class="movie-details">
       <div class="movie-poster">
-        <img
-          :src="getBackdropUrl(article?.poster_path || article?.backdrop_path)"
-          alt="Backdrop Image"
-        />
+        <img :src="getBackdropUrl(article?.poster_path)" alt="Backdrop Image" />
       </div>
       <div class="movie-info">
         <p>영화 번호: {{ article?.movie_id }}</p>
         <p>제목: {{ article?.title }}</p>
         <p>내용: {{ article?.overview }}</p>
         <p>개봉일: {{ article?.release_date }}</p>
-        <p>
-          장르:
+        <p>장르: 
           <span v-for="(genre, index) in article.genre_ids" :key="index">
-            {{ genre.genre_name
-            }}{{ index < article.genre_ids.length - 1 ? ", " : "" }}
+            {{ genre.genre_name }}{{ index < article.genre_ids.length - 1 ? ', ' : '' }}
           </span>
         </p>
-        <!-- 영화 좋아요 버튼 -->
         <button @click="likeMovie(article.id)">
           좋아요
           {{
-            (Array.isArray(article?.like_users) &&
-              article?.like_users.length) ||
-            0
+            (Array.isArray(article?.like_users) && article?.like_users.length) || 0
           }}개
         </button>
       </div>
     </div>
+
     <p>예고편:</p>
     <div v-if="trailerId">
       <iframe
@@ -44,8 +37,9 @@
       <p>예고편이 없습니다.</p>
     </div>
 
-    <!-- 리뷰 작성 폼 -->
 
+    <!-- 리뷰 작성 폼 -->
+    
     <form @submit.prevent="submitReview">
       <p>작성자: {{ currentUser }}</p>
       <label for="user_vote_average">평점:</label>
@@ -56,13 +50,13 @@
         <option value="4">4점 ★★★★</option>
         <option value="5">5점 ★★★★★</option>
       </select>
-      <br />
+      <br>
       <div class="form-group">
-        <textarea
-          v-model="reviewContent"
-          placeholder="리뷰를 작성하세요"
-        ></textarea>
-        <button type="submit">작성</button>
+      <textarea
+        v-model="reviewContent"
+        placeholder="리뷰를 작성하세요"
+      ></textarea>
+      <button type="submit">작성</button>
       </div>
     </form>
     <hr />
@@ -70,34 +64,26 @@
     <hr />
     <!-- 작성된 리뷰 목록 -->
     <div class="writtenReviews">
-      <div v-if="article.reviews && article.reviews.length > 0">
-        <h2>리뷰 목록</h2>
-        <ul>
-          <li v-for="review in article.reviews" :key="review.id">
-            {{ review.content }} - 평점:
-            <span
-              v-for="star in getStars(review.user_vote_average)"
-              :key="star"
-              class="star"
-              >★</span
-            >
-            - 작성자:
-            {{ review.user.username }}
-            <button @click="likeReview(review.id)">
-              좋아요
-              {{
-                (Array.isArray(review?.like_users) &&
-                  review.like_users.length) ||
-                0
-              }}개
-            </button>
-          </li>
-        </ul>
-      </div>
-      <div v-else>
-        <p>리뷰가 없습니다.</p>
-      </div>
+    <div v-if="article.reviews && article.reviews.length > 0">
+      <h2>리뷰 목록</h2>
+      <ul>
+        <li v-for="review in article.reviews" :key="review.id">
+          {{ review.content }} - 평점: <span v-for="star in getStars(review.user_vote_average)" :key="star" class="star">★</span> - 작성자:
+          {{ review.user.username }}
+          <button @click="likeReview(review.id)">
+            좋아요
+            {{
+              (Array.isArray(review?.like_users) && review.like_users.length) ||
+              0
+            }}개
+          </button>
+        </li>
+      </ul>
     </div>
+    <div v-else>
+      <p>리뷰가 없습니다.</p>
+    </div>
+  </div>
   </div>
 </template>
 
@@ -120,28 +106,13 @@ export default {
     };
   },
   computed: {
-    isLogin() {
-      return this.$store.getters.isLogin; // 로그인 여부
-    },
     ...mapState(["token"]),
   },
   created() {
-    this.getArticles();
     this.getCurrentUser(); // 현재 로그인된 사용자 정보를 가져오는 메소드 호출
     this.getArticleDetail();
   },
   methods: {
-    getArticles() {
-      if (this.isLogin) {
-        this.$store.dispatch("getArticles");
-      } else {
-        alert("로그인이 필요한 페이지입니다...");
-        this.$router.push({ name: "LogInView" });
-      }
-
-      // 로그인이 되어 있으면 getArticles action 실행
-      // 로그인 X라면 login 페이지로 이동
-    },
     fetchTrailer() {
       const YOUTUBEAPIKEY = "AIzaSyBynVLUf5yjYB01BF3oODlyJeEKhOcKKiQ"; // replace with your YouTube API key
       const movieTitle = this.article.title; // replace with the actual movie title
@@ -215,6 +186,8 @@ export default {
         headers: { Authorization: `Token ${this.token}` },
       })
         .then((res) => {
+          console.log("로그인");
+          console.log(res);
           this.currentUser = res.data.username; // 사용자 이름을 데이터에 저장
           this.user_id = res.data.pk;
 
@@ -227,6 +200,9 @@ export default {
     },
     submitReview() {
       if (this.reviewContent) {
+        console.log("아이디", this.user_id);
+        console.log("무비아이디", this.article?.movie_id);
+
         const formData = new FormData();
         formData.append("movie", this.article.movie_id);
         formData.append("content", this.reviewContent);
@@ -250,8 +226,8 @@ export default {
       }
     },
     getStars(count) {
-      return Array(count).fill("★");
-    },
+      return Array(count).fill('★')
+    }
   },
 };
 </script>
@@ -269,7 +245,7 @@ export default {
   background-color: #fff;
   padding: 20px;
   /* color: #333; */
-  font-family: "Nanum Gothic", sans-serif;
+  font-family: 'Nanum Gothic', sans-serif;
   background-color: #333;
   color: #fff;
 }
@@ -298,26 +274,25 @@ iframe {
   width: 60%;
 }
 
-form,
-.review-section {
+form, .review-section {
   padding-right: 60px;
   margin-left: 15px;
   justify-content: left;
 }
-form {
-  width: 720px;
+form{
+  width:720px;
   flex-direction: column;
   align-items: flex-start;
 }
 .form-group {
-  display: flex;
-  align-items: stretch; /* textarea와 버튼이 같은 높이를 가지도록 합니다. */
-}
+    display: flex;
+    align-items: stretch; /* textarea와 버튼이 같은 높이를 가지도록 합니다. */
+  }
 .form-group textarea {
   flex: 1; /* textarea가 가능한 모든 공간을 차지하도록 합니다. */
   min-height: 100px; /* textarea의 최소 높이를 설정합니다. 원하는대로 조절하실 수 있습니다. */
   margin-right: 10px; /* textarea와 버튼 사이의 간격을 설정합니다. */
-  width: 100%;
+  width:100%;
 }
 
 .form-group button {
@@ -325,6 +300,6 @@ form {
   width: 50px; /* 버튼의 너비를 설정합니다. 원하는대로 조절하실 수 있습니다. */
 }
 .writtenReviews {
-  padding-right: 220px;
+  padding-right:220px;
 }
 </style>

@@ -1,55 +1,30 @@
 <template>
   <div class="container">
     <div class="selection-box">
-      <h1>태그 검색</h1>
-      <div class="checkbox-grid my-3">
-        <b-form-checkbox-group
-          class="d-flex flex-wrap"
-          stacked
-          v-model="selectedGenres"
-          :options="genres"
-          @change="handleGenreSelection"
-        ></b-form-checkbox-group>
-      </div>
-      <label for="year">개봉년도 : </label>
-      <select id="year" v-model="selectedYear">
-        <option value="">선택하지 않음</option>
-        <option v-for="year in years" :key="year">{{ year }}</option>
-      </select>
-      <label for="rating">Rating : </label>
-      <select id="rating" v-model="selectedRating">
-        <option value="">선택하지 않음</option>
-        <option v-for="rating in ratings" :key="rating" :value="rating">
-          {{ rating }}
-        </option>
-      </select>
+    <h1>태그 검색</h1>
+    <div class="checkbox-grid my-3">
+      <b-form-checkbox-group class="d-flex flex-wrap" stacked v-model="selectedGenres" :options="genres" @change="handleGenreSelection"></b-form-checkbox-group>
     </div>
-    <b-button
-      class="search-button"
-      variant="dark"
-      text-variant="secondary"
-      @click="searchMovies"
-      :disabled="selectedGenres.length === 0"
-    >
+    <label for="year">개봉년도 : </label>
+    <select id="year" v-model="selectedYear">
+      <option value="">선택하지 않음</option>
+      <option v-for="year in years" :key="year">{{ year }}</option>
+    </select>
+    <label for="rating">Rating : </label>
+    <select id="rating" v-model="selectedRating">
+      <option value="">선택하지 않음</option>
+      <option v-for="rating in ratings" :key="rating" :value="rating">{{ rating }}</option>
+    </select>
+  </div>
+    <b-button class="search-button" variant="dark" text-variant="secondary" @click="searchMovies" :disabled="selectedGenres.length === 0">
       Search Movies
     </b-button>
     <div class="movies d-flex flex-wrap justify-content-around">
-      <div
-        class="movie-card"
-        v-for="movie in movies"
-        :key="movie.id"
-        @click="goToDetail(movie.id)"
-        @mouseenter="hovering = true"
-        @mouseleave="hovering = false"
-      >
+      <div class="movie-card" v-for="movie in movies" :key="movie.id" @click="goToDetail(movie.id)" @mouseenter="hovering=true" @mouseleave="hovering=false">
         <div class="movie-poster">
-          <img
-            :src="'https://image.tmdb.org/t/p/w500' + movie.poster_path"
-            alt="Movie poster"
-          />
-          <h5 v-show="hovering" class="movie-title">
-            {{ movie.title }}
-            <br />
+        <img :src="'https://image.tmdb.org/t/p/w500' + movie.poster_path" alt="Movie poster"/>
+          <h5 v-show="hovering" class="movie-title">{{ movie.title }}
+            <br>
             ★ : {{ movie.vote_average }}
           </h5>
         </div>
@@ -62,7 +37,8 @@
 </template>
 
 <script>
-import axios from "axios";
+
+import axios from 'axios';
 const API_URL = "http://127.0.0.1:8000";
 
 export default {
@@ -71,21 +47,19 @@ export default {
       genres: [],
       selectedGenres: [],
       movies: [],
-      years: [...Array(new Date().getFullYear() - 1969).keys()]
-        .map((i) => i + 1970)
-        .reverse(),
-      ratings: Array.from({ length: 11 }, (_, i) => i),
-      selectedYear: "",
-      selectedRating: "",
-      API_KEY: "93ed8c8631dfd36c74cab19d569d6745",
-      searchExecuted: false,
-      hovering: false,
+      years:[...Array(new Date().getFullYear() - 1969).keys()].map((i) => i+1970).reverse(),
+      ratings:Array.from({length:11},(_,i)=>i),
+      selectedYear: '',
+      selectedRating: '',
+      API_KEY: '93ed8c8631dfd36c74cab19d569d6745',
+      searchExecuted:false,
+      hovering:false,
     };
   },
-  computed: {
+  computed:{
     noMovies() {
       return this.searchExecuted && this.movies.length === 0;
-    },
+    }
   },
   async created() {
     try {
@@ -109,41 +83,37 @@ export default {
       }
     },
     async searchMovies() {
-      this.searchExecuted = true;
+      this.searchExecuted=true;
       try {
-        let url = `https://api.themoviedb.org/3/discover/movie?api_key=${
-          this.API_KEY
-        }&with_genres=${this.selectedGenres.join(",")}&language=ko-KR&year=${
-          this.selectedYear
-        }`;
+        let url =`https://api.themoviedb.org/3/discover/movie?api_key=${this.API_KEY}&with_genres=${this.selectedGenres.join(',')}&language=ko-KR&year=${this.selectedYear}`;
 
         if (this.selectedYear) {
-          url += `&primary_release_year=${this.selectedYear}`;
+        url += `&primary_release_year=${this.selectedYear}`;
         }
-
+        
         if (this.selectedRating) {
-          url += `&vote_average.gte=${this.selectedRating}`;
+          url += `&vote_average.gte=${this.selectedRating}`
         }
 
         const response = await axios.get(url);
 
         const moviesWithDetails = await Promise.all(
-          response.data.results.map(async (movie) => {
+          response.data.results.map(async(movie) => {
             try {
               await axios.get(`${API_URL}/api/v1/movies/${movie.id}/`);
-              return movie;
-            } catch (error) {
+              return movie ;
+            } catch(error) {
               return null;
             }
           })
-        );
+        )
         this.movies = moviesWithDetails.filter(Boolean);
       } catch (error) {
         console.error(error);
       }
     },
     goToDetail(movieId) {
-      this.$router.push({ name: "DetailView", params: { id: movieId } });
+      this.$router.push({name:'DetailView',params:{id:movieId}});
     },
   },
 };
@@ -162,17 +132,17 @@ export default {
 }
 .checkbox-grid {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap:wrap;
   justify-content: space-between;
-  max-width: 400px; /* 각 checkbox가 약 100px 넓이를 가지므로 */
-  margin: 0 auto; /* 중앙 정렬 */
-  font-family: "Nanum Gothic", sans-serif;
+  max-width: 400px;  /* 각 checkbox가 약 100px 넓이를 가지므로 */
+  margin: 0 auto;  /* 중앙 정렬 */
+  font-family: 'Nanum Gothic', sans-serif;
   font-weight: normal;
   color: black;
   /* grid-template-columns: repeat(5, 1fr);
   gap: 10px; */
 }
-.search-button {
+.search-button{
   display: block;
   margin: 20px auto;
   background-color: darkgray; /* replace #yourcolor with the color you want */
@@ -203,8 +173,8 @@ export default {
 }
 
 .movie-card {
-  position: relative;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  position:relative;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
   transition: 0.3s;
   width: 30%;
   border-radius: 5px;
@@ -226,7 +196,7 @@ export default {
   position: relative;
 }
 .movie-card:hover {
-  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
 }
 .movie-card:hover:before {
   content: "";
@@ -235,7 +205,7 @@ export default {
   bottom: 0;
   left: 0;
   right: 0;
-  background: rgba(0, 0, 0, 0.7); /* 50% transparent black */
+  background: rgba(0, 0, 0, 0.7);  /* 50% transparent black */
   border-radius: 5px;
 }
 .movie-title {
@@ -250,7 +220,7 @@ export default {
 .movie-card:hover .movie-title {
   opacity: 1;
 }
-.movie-card h2 {
+.movie-card h2{
   text-align: center;
   top: 50%;
   left: 50%;
@@ -259,22 +229,23 @@ export default {
   text-align: center;
   opacity: 0;
   transition: opacity 0.3s ease-in-out;
+  
 }
 .movie-card:hover h2 {
   opacity: 1;
 }
 .movie-card h5 {
-  font-family: "Nanum Gothic", sans-serif;
+  font-family: 'Nanum Gothic', sans-serif;
   font-weight: 400;
   color: white;
 }
 h1 {
-  font-family: "Nanum Gothic", sans-serif;
+  font-family: 'Nanum Gothic', sans-serif;
   font-weight: 400;
   color: black;
 }
 label {
-  font-family: "Nanum Gothic", sans-serif;
+  font-family: 'Nanum Gothic', sans-serif;
   font-weight: 100;
   color: black;
 }

@@ -1,30 +1,22 @@
 <template>
   <div class="article-list">
     <h3>10번 클릭한 것들 중 가장 많은 장르</h3>
-
-    <div v-if="isLoading">Loading...</div>
+    <div v-if="isLoading">
+      Loading...
+    </div>
     <div v-else>
-      <div v-if="sortedGenres.length === 0">정보없음</div>
-      <div v-else>
-        <div v-for="genre in sortedGenres" :key="genre.id">
-          <h2>{{ getGenreName(genre.id) }}</h2>
-          <p v-for="movie in recommendedMovies[genre.id]" :key="movie.movie_id">
-            {{ movie.title }}
-
-            <router-link
-              :to="{
-                name: 'DetailView',
-                params: { id: movie.movie_id },
-              }"
-            >
-              <img
-                :src="getBackdropUrl(movie.poster_path || movie.backdrop_path)"
-                alt="Backdrop Image"
-                @click="handleMovieClick(movie)"
-              />
-            </router-link>
-          </p>
-        </div>
+      <div v-for="genre in sortedGenres" :key="genre.id">
+        <h2>{{ getGenreName(genre.id) }}</h2>
+        <p v-for="movie in recommendedMovies[genre.id]" :key="movie.movie_id">
+          {{ movie.title }}
+          <router-link
+      :to="{
+        name: 'DetailView',
+        params: { id: movie.movie_id },
+      }" >
+          <img :src="getBackdropUrl(movie.poster_path)" alt="Backdrop Image" />
+          </router-link>
+        </p>
       </div>
     </div>
   </div>
@@ -37,7 +29,6 @@ export default {
   name: "ArticleList",
   data() {
     return {
-      nothing: false,
       recommendedMovies: {},
       isLoading: true,
     };
@@ -77,31 +68,6 @@ export default {
     this.fetchRecommendedMovies();
   },
   methods: {
-    handleMovieClick(article) {
-      const payload = {
-        movie: article.movie_id,
-        genre_ids: article.genre_ids.map((genre) => genre.genre_id),
-      };
-
-      // 서버로 영화 클릭 정보 전송
-      axios
-        .post("http://127.0.0.1:8000/api/v1/recent_moives/", payload, {
-          headers: {
-            Authorization: `Token ${this.token}`,
-          },
-        })
-        .then((response) => {
-          // 처리 성공 시 로직
-          console.log(response.data);
-        })
-        .catch((error) => {
-          // 에러 처리 로직
-
-          console.error(error);
-
-          this.nothing = true;
-        });
-    },
     fetchRecommendedMovies() {
       const genreIds = this.sortedGenres.map((genre) => genre.id);
       const movieIdsPromises = genreIds.map((genreId) =>
@@ -175,7 +141,7 @@ export default {
 ul {
   margin-left: 1rem;
 }
-img {
+img{
   width: 100px;
   height: 100px;
 }

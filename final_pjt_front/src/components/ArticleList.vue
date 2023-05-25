@@ -1,48 +1,44 @@
 <template>
   <div class="article-list">
-    <ArticleListItem
-      v-for="article in articles"
-      :key="article.id"
-      :article="article"
+    <ArticleListItem 
+    v-for="article in articles" :key="article.id" :article="article"
     />
   </div>
 </template>
 
 <script>
-import ArticleListItem from "@/components/ArticleListItem";
+import ArticleListItem from '@/components/ArticleListItem'
 
 export default {
-  name: "ArticleList",
+  name: 'ArticleList',
   components: {
     ArticleListItem,
   },
+  data() {
+    return {
+      page: 1,
+    }
+  },
   computed: {
     articles() {
-      return this.$store.state.articles;
-    },
+      return this.$store.state.articles
+    }
   },
   methods: {
     loadMoreArticles() {
       this.page += 1;
-      this.$store.dispatch("getArticles", this.page);
+      this.$store.dispatch('getArticles',this.page)
     },
   },
   created() {
-    window.addEventListener("scroll", () => {
-      let bottomOfWindow =
-        Math.max(
-          window.pageYOffset,
-          document.documentElement.scrollTop,
-          document.body.scrollTop
-        ) +
-          window.innerHeight ===
-        document.documentElement.offsetHeight;
-      if (bottomOfWindow) {
-        this.loadMoreArticles();
-      }
-    });
+    window.addEventListener('scroll', () => {
+      let bottomOfWindow = Math.max(window.pageYOffset, document.documentElement.scrollTop, document.body.scrollTop) + window.innerHeight === document.documentElement.offsetHeight;
+    if (bottomOfWindow) {
+      this.loadMoreArticles();
+    }
+  });
   },
-};
+}
 </script>
 
 <style>

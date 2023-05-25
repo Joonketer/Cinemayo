@@ -1,18 +1,29 @@
 <template>
-  <div>
-    <h1>LogIn Page</h1>
-    <form @submit.prevent="login">
-      <label for="username">username : </label>
-      <input type="text" id="username" v-model="username"><br>
+  <b-container fluid class="d-flex align-items-center justify-content-center vh-100 bg-#333 text-white">
+    <b-card class="text-white bg-dark" style="width: 30rem;">
+      <h1 class="text-center">LogIn Page</h1>
+      <b-card-body>
+        <form @submit.prevent="login">
+          <b-form-group label="username : " label-for="username" label-class="text-white">
+            <b-form-input id="username" v-model="username"></b-form-input>
+          </b-form-group>
 
-      <label for="password"> password : </label>
-      <input type="password" id="password" v-model="password"><br>
-
-      <input type="submit" value="logIn">
-    </form>
-  </div>
+          <b-form-group label="password : " label-for="password" label-class="text-white">
+            <b-form-input type="password" id="password" v-model="password"></b-form-input>
+          </b-form-group>
+          <p>회원이 아니라면,
+          <router-link  to="/signup">
+          회원가입
+          </router-link>
+          </p>
+          <div class="d-flex justify-content-center">
+          <b-button type="submit" variant="light">logIn</b-button>
+          </div>
+        </form>
+      </b-card-body>
+    </b-card>
+  </b-container>
 </template>
-
 <script>
 export default {
   name: 'LogInView',
@@ -32,8 +43,13 @@ export default {
       }
 
       this.$store.dispatch('login', payload)
-
     }
   }
 }
 </script>
+
+<style scoped>
+.h-100 {
+  height: 100vh;
+}
+</style>

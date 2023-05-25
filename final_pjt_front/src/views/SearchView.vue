@@ -7,14 +7,14 @@
         {{ movie.id }}
         <div v-if="movie_detail">
           <img
-            :src="getBackdropUrl(movie.poster_path || movie.backdrop_path)"
+            :src="getBackdropUrl(movie.poster_path)"
             alt="Backdrop Image"
             @click="checkMovieExistence(movie)"
           />
         </div>
         <div v-else>
           <img
-            :src="getBackdropUrl(movie.poster_path || movie.backdrop_path)"
+            :src="getBackdropUrl(movie.poster_path)"
             alt="Backdrop Image"
             @click="checkMovieExistence(movie)"
           />
@@ -36,9 +36,6 @@ export default {
       movie_detail: null,
     };
   },
-  created() {
-    this.getArticles();
-  },
   props: {
     searchQuery: {
       type: String,
@@ -46,9 +43,6 @@ export default {
     },
   },
   computed: {
-    isLogin() {
-      return this.$store.getters.isLogin; // 로그인 여부
-    },
     ...mapState(["token"]),
     filteredSearchResults() {
       return this.searchResults.filter((movie) =>
@@ -69,17 +63,6 @@ export default {
     },
   },
   methods: {
-    getArticles() {
-      if (this.isLogin) {
-        this.$store.dispatch("getArticles");
-      } else {
-        alert("로그인이 필요한 페이지입니다...");
-        this.$router.push({ name: "LogInView" });
-      }
-
-      // 로그인이 되어 있으면 getArticles action 실행
-      // 로그인 X라면 login 페이지로 이동
-    },
     searchMovies() {
       const url = `https://api.themoviedb.org/3/search/movie?query=${this.searchQuery}&include_adult=false&language=ko-KOR&page=1`;
 
@@ -141,6 +124,7 @@ export default {
         return;
       }
 
+      console.log("모든데이터", this.searchResults);
       const movieData = {
         movie_id: movie_detail.id,
         overview: movie_detail.overview,
@@ -154,7 +138,8 @@ export default {
         genre_ids: movie_detail.genres,
         // 필요한 다른 영화 정보도 추가할 수 있습니다.
       };
-
+      console.log("확인", movie_detail);
+      console.log("내부", movieData);
       axios
         .post(API_URL, movieData)
         .then(() => {
@@ -173,7 +158,7 @@ export default {
         .get(API_URL)
         .then((response) => {
           const movieData = response.data;
-
+          console.log("최종", movieData);
           this.$router.push({
             name: "DetailView",
             params: movieData,
