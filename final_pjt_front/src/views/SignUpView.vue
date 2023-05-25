@@ -1,14 +1,9 @@
 <template>
-<<<<<<< HEAD
   <b-container
     fluid
     class="d-flex align-items-center justify-content-center vh-100 bg-#333 text-white"
   >
     <b-card class="text-white bg-dark" style="width: 30rem">
-=======
-  <b-container fluid class="d-flex align-items-center justify-content-center vh-100 bg-#333 text-white">
-    <b-card border-variant=light class="text-white bg-dark" style="width: 30rem;">
->>>>>>> 4ad94c06a2bdfe17f4c405926cdca4e30af4f356
       <h1 class="text-center">회원가입</h1>
       <b-card-body>
         <form @submit.prevent="signUp">

@@ -1,12 +1,8 @@
 <template>
   <div id="app">
     <div class="container">
-      <b-navbar
-        toggleable="lg"
-        type="dark"
-        variant="#333"
-        v-if="!isLoginPage && !isSignupPage"
-      >
+      <b-navbar toggleable="lg" type="dark" variant="#333"
+      v-if="!isLoginPage && !isSignupPage">
         <b-navbar-brand @click="navigateHome">
           <img class="logo" src="@/assets/Cinemayologo.png" alt="minilogo" />
         </b-navbar-brand>
@@ -63,12 +59,6 @@ export default {
   computed: {
     currentUser() {
       return this.$store.state.userinfo || {}; // 현재 로그인된 회원의 정보를 가져옴
-    },
-    isSignupPage() {
-      return this.$route.path === "/signup";
-    },
-    isLoginPage() {
-      return this.$route.path === "/login"; // adjust this path to your login page route
     },
     isLogin() {
       return this.$store.getters.isLogin;
@@ -229,11 +219,7 @@ body,
 hr {
   border-color: white;
 }
-<<<<<<< HEAD
-.a {
-=======
 a.router-link-active {
->>>>>>> 4ad94c06a2bdfe17f4c405926cdca4e30af4f356
   color: #f5f5f5; /* a color close to white */
 }
 </style>

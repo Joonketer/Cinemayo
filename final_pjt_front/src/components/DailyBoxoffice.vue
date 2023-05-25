@@ -1,11 +1,21 @@
 <template>
   <b-container>
     <div class="Daily-Boxoffice-title d-flex justify-content-center">
-    <h5>일간 박스오피스 순위</h5>
+      <h5>일간 박스오피스 순위</h5>
     </div>
     <b-row>
-      <b-col md="4" v-for="boxmovie in dailyBoxOfficeList" :key="boxmovie.boxmovieCd">
-        <b-card bg-variant="dark" text-variant="white" class="mb-4 custom-card" style="width: 18rem;">
+      <b-col
+        md="4"
+        v-for="boxmovie in dailyBoxOfficeList"
+        :key="boxmovie.boxmovieCd"
+      >
+        <b-card
+          @click="searchMovie(boxmovie.movieNm)"
+          bg-variant="dark"
+          text-variant="white"
+          class="mb-4 custom-card"
+          style="width: 18rem"
+        >
           <h4>Rank: {{ boxmovie.rank }}</h4>
           <b-card-text>
             <h5>{{ boxmovie.movieNm }}</h5>
@@ -28,6 +38,11 @@ export default {
     this.fetchDailyBoxOffice();
   },
   methods: {
+    searchMovie(movieName) {
+      const searchQuery = encodeURIComponent(movieName);
+      const googleSearchURL = `https://www.google.com/search?q=영화%20${searchQuery}`;
+      window.open(googleSearchURL, "_blank");
+    },
     fetchDailyBoxOffice() {
       const DAILY_BOXOFFICE_API_URL =
         "http://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json";
