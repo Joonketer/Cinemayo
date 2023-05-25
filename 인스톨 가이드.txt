@@ -1,6 +1,7 @@
 인스톨 가이드
 
 npm install
+* err 발생시 npm install --force
 npm install bootstrap-vue
 npm uninstall swiper
 npm install swiper@6

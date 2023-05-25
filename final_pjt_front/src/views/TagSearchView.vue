@@ -1,8 +1,8 @@
 <template>
   <div class="container">
     <div class="selection-box">
-      <h1>태그 검색</h1>
-      <div class="checkbox-grid my-3">
+      <h1 style="color: white">태그 검색</h1>
+      <div class="checkbox-grid my-3" style="color: white">
         <b-form-checkbox-group
           class="d-flex flex-wrap"
           stacked
@@ -11,12 +11,12 @@
           @change="handleGenreSelection"
         ></b-form-checkbox-group>
       </div>
-      <label for="year">개봉년도 : </label>
+      <label for="year" style="color: white">개봉년도 : </label>
       <select id="year" v-model="selectedYear">
         <option value="">선택하지 않음</option>
         <option v-for="year in years" :key="year">{{ year }}</option>
       </select>
-      <label for="rating">Rating : </label>
+      <label for="rating" style="color: white">Rating : </label>
       <select id="rating" v-model="selectedRating">
         <option value="">선택하지 않음</option>
         <option v-for="rating in ratings" :key="rating" :value="rating">

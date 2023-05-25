@@ -1,11 +1,11 @@
 <template>
   <div>
     <div class="search-result-title d-flex justify-content-center">
-    <h2>검색 결과</h2>
+      <h2>검색 결과</h2>
     </div>
     <div v-if="filteredSearchResults" class="result-container">
-      <div 
-        v-for="movie in filteredSearchResults" 
+      <div
+        v-for="movie in filteredSearchResults"
         :key="movie.id"
         class="movie-card"
         @mouseenter="showDetails(movie)"
@@ -16,9 +16,13 @@
           alt="Backdrop Image"
           @click="checkMovieExistence(movie)"
         />
-        <div class="movie-info" v-if="movie.showDetails">
+        <div
+          class="movie-info"
+          v-if="movie.showDetails"
+          @click="checkMovieExistence(movie)"
+        >
           <h3>{{ movie.title }}</h3>
-          <p> ★ : {{ movie.vote_average }}</p>
+          <p>★ : {{ movie.vote_average }}</p>
         </div>
       </div>
     </div>
@@ -81,11 +85,11 @@ export default {
       // 로그인 X라면 login 페이지로 이동
     },
     showDetails(movie) {
-    this.$set(movie, 'showDetails', true);
-  },
-  hideDetails(movie) {
-    this.$set(movie, 'showDetails', false);
-  },
+      this.$set(movie, "showDetails", true);
+    },
+    hideDetails(movie) {
+      this.$set(movie, "showDetails", false);
+    },
     searchMovies() {
       const url = `https://api.themoviedb.org/3/search/movie?query=${this.searchQuery}&include_adult=false&language=ko-KOR&page=1`;
 
@@ -122,6 +126,7 @@ export default {
           const movieData = response.data;
           if (!movieData.exists) {
             // 선택한 영화가 존재하지 않을 경우에 대한 처리
+
             console.log("영화가 존재하지 않습니다.");
             this.addMovieToDatabase(movieId);
           } else {
@@ -168,6 +173,7 @@ export default {
           this.navigateToDetail(movie_id);
         })
         .catch((error) => {
+          alert("영화 데이터가 아닙니다");
           console.error("영화 추가 중 오류가 발생했습니다:", error);
         });
     },
@@ -216,14 +222,14 @@ img {
 .movie-card img {
   width: 100%;
   height: 100%;
-  transition: .5s ease;
+  transition: 0.5s ease;
   backface-visibility: hidden;
 }
 .movie-card:hover img {
   opacity: 0.3;
 }
 .movie-info {
-  transition: .5s ease;
+  transition: 0.5s ease;
   opacity: 0;
   position: absolute;
   top: 50%;
