@@ -28,9 +28,43 @@ export default {
     ...mapState(["userinfo"]),
   },
   created() {
+<<<<<<< HEAD
     // if(!this.userinfo){
     this.$store.dispatch("getMyProfile");
     // }
+=======
+    if (this.isLogin) {
+      this.$store.dispatch("getMyProfile");
+      this.fetchUsers();
+      this.getArticles();
+    } else {
+      alert("로그인이 필요한 페이지입니다...");
+      this.$router.push({ name: "LogInView" });
+    }
+  },
+  methods: {
+    getArticles() {
+      if (this.isLogin) {
+        this.$store.dispatch("getArticles");
+      } else {
+        alert("로그인이 필요한 페이지입니다...");
+        this.$router.push({ name: "LogInView" });
+      }
+
+      // 로그인이 되어 있으면 getArticles action 실행
+      // 로그인 X라면 login 페이지로 이동
+    },
+    fetchUsers() {
+      axios
+        .get("http://127.0.0.1:8000/profile/allusers/check/") // Django API 엔드포인트를 설정하세요
+        .then((response) => {
+          this.users = response.data;
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    },
+>>>>>>> origin/main
   },
 };
 </script>

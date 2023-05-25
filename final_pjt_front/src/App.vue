@@ -8,6 +8,7 @@
 
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
+<<<<<<< HEAD
       <b-collapse id="nav-collapse" is-nav>
         <b-navbar-nav>
           
@@ -28,6 +29,51 @@
     </b-navbar>
     <div class="content">
     <router-view :search-results="searchResults" :search-query="searchQuery" />
+=======
+        <b-collapse id="nav-collapse" is-nav>
+          <b-navbar-nav>
+            <b-nav-form class="search-container" v-if="isLogin">
+              <b-form-input
+                v-model="searchQuery"
+                placeholder="영화 검색어를 입력하세요"
+                @keyup.enter="searchMovies"
+              />
+              <b-button
+                size="sm"
+                class="my-2 my-sm-0"
+                type="submit"
+                @click="searchMovies"
+                >검색</b-button
+              >
+            </b-nav-form>
+            <b-nav-item
+              v-if="isLogin"
+              :to="{
+                name: 'ProfileView',
+                params: { username: currentUser.username || '' },
+              }"
+              >내 프로필</b-nav-item
+            >
+            <b-nav-item :to="{ name: 'ArticleView' }">All Movies</b-nav-item>
+            <b-nav-item :to="{ name: 'RecommendView' }">추천영화</b-nav-item>
+            <b-nav-item :to="{ name: 'BoxOfficeView' }">박스오피스</b-nav-item>
+            <b-nav-item :to="{ name: 'TagSearchView' }">태그검색</b-nav-item>
+            <b-nav-item :to="{ name: 'CommunityView' }">커뮤니티</b-nav-item>
+            <b-nav-item v-if="!isLogin" :to="{ name: 'SignUpView' }"
+              >SignUpPage</b-nav-item
+            >
+            <b-nav-item v-if="isLogin" @click="logout">Logout</b-nav-item>
+          </b-navbar-nav>
+        </b-collapse>
+      </b-navbar>
+      <div class="content">
+        <router-view
+          :search-results="searchResults"
+          :search-query="searchQuery"
+        />
+      </div>
+    </div>
+>>>>>>> origin/main
   </div>
   </div>
 </div>
