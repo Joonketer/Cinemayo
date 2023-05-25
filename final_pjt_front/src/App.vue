@@ -10,7 +10,7 @@
 
         <b-collapse id="nav-collapse" is-nav>
           <b-navbar-nav>
-            <b-nav-form class="search-container">
+            <b-nav-form class="search-container" v-if="isLogin">
               <b-form-input
                 v-model="searchQuery"
                 placeholder="영화 검색어를 입력하세요"
@@ -25,6 +25,7 @@
               >
             </b-nav-form>
             <b-nav-item
+              v-if="isLogin"
               :to="{
                 name: 'ProfileView',
                 params: { username: currentUser.username || '' },
