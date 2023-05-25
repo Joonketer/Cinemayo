@@ -1,17 +1,21 @@
 <template>
-  <div>
-    <h1>Daily Box Office</h1>
-    <div>
-      <div v-for="boxmovie in dailyBoxOfficeList" :key="boxmovie.boxmovieCd">
-        <p>Rank: {{ boxmovie.rank }}</p>
-
-        <h2>{{ boxmovie.movieNm }}</h2>
-        <p>관객동원수: {{ boxmovie.audiCnt }}</p>
-      </div>
+  <b-container>
+    <div class="Daily-Boxoffice-title d-flex justify-content-center">
+    <h5>일간 박스오피스 순위</h5>
     </div>
-  </div>
+    <b-row>
+      <b-col md="4" v-for="boxmovie in dailyBoxOfficeList" :key="boxmovie.boxmovieCd">
+        <b-card bg-variant="dark" text-variant="white" class="mb-4 custom-card" style="width: 18rem;">
+          <h4>Rank: {{ boxmovie.rank }}</h4>
+          <b-card-text>
+            <h5>{{ boxmovie.movieNm }}</h5>
+            <p>관객동원수: {{ boxmovie.audiCnt }}</p>
+          </b-card-text>
+        </b-card>
+      </b-col>
+    </b-row>
+  </b-container>
 </template>
-  
   <script>
 import axios from "axios";
 export default {
@@ -61,7 +65,9 @@ export default {
 };
 </script>
   
-  <style scoped>
-/* Add your custom styles here */
+<style scoped>
+.custom-card .card-body {
+  padding: 2rem; /* adjust this as per your requirement */
+}
 </style>
   

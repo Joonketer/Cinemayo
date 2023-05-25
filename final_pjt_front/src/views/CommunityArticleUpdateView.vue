@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <div>
     <h1>게시글 수정</h1>
     <form @submit.prevent="updateBoard">
@@ -10,8 +10,32 @@
       <input type="submit" id="submit" />
     </form>
   </div>
+</template> -->
+<template>
+<b-container class="d-flex align-items-center justify-content-center vh-100">
+  <b-card border-variant="light" class="bg-dark" style="width: 30rem;">
+    <h1 class="text-center variant-dark">게시글 수정</h1>
+    <b-card-body>
+      <form @submit.prevent="updateBoard">
+        <b-form-group label-for="title">
+          <label class="form-label">제목 :</label>
+          <b-form-input id="title" v-model.trim="title" />
+        </b-form-group>
+        
+        <b-form-group label-for="content">
+          <label class="form-label">내용 :</label>
+          <b-form-textarea id="content" cols="30" rows="10" v-model="content" />
+        </b-form-group>
+        
+        <div class="d-flex justify-content-center">
+          <b-button type="submit" variant="success" id="submit">제출</b-button>
+        </div>
+        <router-link to="/community">Back to Community</router-link><br />
+      </form>
+    </b-card-body>
+  </b-card>
+</b-container>
 </template>
-  
 <script>
 import axios from "axios";
 import { mapState } from "vuex";

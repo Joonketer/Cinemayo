@@ -1,15 +1,22 @@
-
-   <template>
-  <div>
-    <h1>Weekly Box Office</h1>
-    <div>
-      <div v-for="box2movie in weeklyBoxOfficeList" :key="box2movie.movieCd">
-        <p>Rank: {{ box2movie.rank }}</p>
-        <h2>{{ box2movie.movieNm }}</h2>
-        <p>관객동원수: {{ box2movie.audiCnt }}</p>
-      </div>
+<template>
+  <b-container>
+    <div class="Boxoffice-title d-flex justify-content-center">
+      <h5>주말 박스오피스 순위</h5>
     </div>
-  </div>
+
+    <b-row>
+      <b-col md="4" v-for="box2movie in weeklyBoxOfficeList" :key="box2movie.movieCd">
+        <b-card  bg-variant="dark" text-variant="white" class="mb-4 custom-card" style="width: 18rem;">
+          <h4>Rank: {{ box2movie.rank }}</h4>
+          <b-card-text>
+            <h5>{{ box2movie.movieNm }}</h5>
+            <p>관객동원수: {{ box2movie.audiCnt }}</p>
+          </b-card-text>
+        </b-card>
+
+      </b-col>
+    </b-row>
+  </b-container>
 </template>
 
 <script>
@@ -55,5 +62,8 @@ export default {
 </script>
 
 <style scoped>
-/* Add your custom styles here */
+.custom-card .card-body {
+  padding: 3rem; /* adjust this as per your requirement */
+  
+}
 </style>

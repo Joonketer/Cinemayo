@@ -1,29 +1,29 @@
 <template>
   <div>
+    <div class="search-result-title d-flex justify-content-center">
     <h2>검색 결과</h2>
-    <div v-if="filteredSearchResults">
-      <div v-for="movie in filteredSearchResults" :key="movie.id">
-        {{ movie.title }}
-        {{ movie.id }}
-        <div v-if="movie_detail">
-          <img
-            :src="getBackdropUrl(movie.poster_path || movie.backdrop_path)"
-            alt="Backdrop Image"
-            @click="checkMovieExistence(movie)"
-          />
-        </div>
-        <div v-else>
-          <img
-            :src="getBackdropUrl(movie.poster_path || movie.backdrop_path)"
-            alt="Backdrop Image"
-            @click="checkMovieExistence(movie)"
-          />
+    </div>
+    <div v-if="filteredSearchResults" class="result-container">
+      <div 
+        v-for="movie in filteredSearchResults" 
+        :key="movie.id"
+        class="movie-card"
+        @mouseenter="showDetails(movie)"
+        @mouseleave="hideDetails(movie)"
+      >
+        <img
+          :src="getBackdropUrl(movie.poster_path || movie.backdrop_path)"
+          alt="Backdrop Image"
+          @click="checkMovieExistence(movie)"
+        />
+        <div class="movie-info" v-if="movie.showDetails">
+          <h3>{{ movie.title }}</h3>
+          <p> ★ : {{ movie.vote_average }}</p>
         </div>
       </div>
     </div>
   </div>
 </template>
-
 <script>
 import axios from "axios";
 import { mapState } from "vuex";
@@ -80,6 +80,12 @@ export default {
       // 로그인이 되어 있으면 getArticles action 실행
       // 로그인 X라면 login 페이지로 이동
     },
+    showDetails(movie) {
+    this.$set(movie, 'showDetails', true);
+  },
+  hideDetails(movie) {
+    this.$set(movie, 'showDetails', false);
+  },
     searchMovies() {
       const url = `https://api.themoviedb.org/3/search/movie?query=${this.searchQuery}&include_adult=false&language=ko-KOR&page=1`;
 
@@ -188,11 +194,45 @@ export default {
 </script>
 
 <style scoped>
-ul {
+/* ul {
   margin-left: 1rem;
 }
 img {
   width: 100px;
   height: 100px;
+} */
+.result-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+.movie-card {
+  position: relative;
+  width: 200px;
+  height: 300px;
+  margin: 10px;
+  overflow: hidden;
+}
+.movie-card img {
+  width: 100%;
+  height: 100%;
+  transition: .5s ease;
+  backface-visibility: hidden;
+}
+.movie-card:hover img {
+  opacity: 0.3;
+}
+.movie-info {
+  transition: .5s ease;
+  opacity: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  text-align: center;
+}
+.movie-card:hover .movie-info {
+  opacity: 1;
 }
 </style>

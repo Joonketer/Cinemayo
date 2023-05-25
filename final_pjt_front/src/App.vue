@@ -1,7 +1,8 @@
 <template>
   <div id="app">
     <div class="container">
-      <b-navbar toggleable="lg" type="dark" variant="info">
+      <b-navbar toggleable="lg" type="dark" variant="#333"
+      v-if="!isLoginPage && !isSignupPage">
         <b-navbar-brand @click="navigateHome">
           <img class="logo" src="@/assets/Cinemayologo.png" alt="minilogo" />
         </b-navbar-brand>
@@ -10,7 +11,7 @@
 
         <b-collapse id="nav-collapse" is-nav>
           <b-navbar-nav>
-            <b-nav-form class="search-container" v-if="isLogin">
+            <div class="search-container" v-if="isLogin">
               <b-form-input
                 v-model="searchQuery"
                 placeholder="영화 검색어를 입력하세요"
@@ -23,7 +24,7 @@
                 @click="searchMovies"
                 >검색</b-button
               >
-            </b-nav-form>
+            </div>
             <b-nav-item
               v-if="isLogin"
               :to="{
@@ -216,6 +217,9 @@ body,
 }
 hr {
   border-color: white;
+}
+.a{
+  color: #f5f5f5; /* a color close to white */
 }
 </style>
 
