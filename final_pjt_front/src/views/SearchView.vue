@@ -21,7 +21,7 @@
           v-if="movie.showDetails"
           @click="checkMovieExistence(movie)"
         >
-          <h3>{{ movie.title }}</h3>
+          <h5>{{ movie.title }}</h5>
           <p>★ : {{ movie.vote_average }}</p>
         </div>
       </div>

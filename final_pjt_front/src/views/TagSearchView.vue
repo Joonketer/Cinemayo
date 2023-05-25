@@ -29,8 +29,7 @@
       variant="dark"
       text-variant="secondary"
       @click="searchMovies"
-      :disabled="selectedGenres.length === 0"
-    >
+      :disabled="selectedGenres.length === 0">
       Search Movies
     </b-button>
     <div class="movies d-flex flex-wrap justify-content-around">

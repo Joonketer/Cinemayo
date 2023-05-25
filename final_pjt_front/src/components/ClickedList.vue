@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <div class="article-list">
     <h3>마지막 클릭한 사진과 관련된 정보</h3>
     <div v-if="nothing">정보없음</div>
@@ -41,7 +41,56 @@
       </div>
     </div>
   </div>
+</template> -->
+
+<template>
+  <div class="article-list text-center">
+    <h3>마지막 클릭한 사진과 관련된 정보</h3>
+    <div v-if="nothing">정보없음</div>
+    <div v-else>
+      <div v-if="isLoading">Loading...</div>
+      <div v-else>
+        <div v-if="lastClickedPhoto">
+          <b-card class="bg-dark text-white">
+            <h4 class="card-title">{{ lastClickedPhoto.movie }}</h4>
+            <p class="card-text">{{ Movies_title }}</p>
+          </b-card>
+        </div>
+        <div v-else>
+          <b-card class="bg-dark text-white">
+            <p class="card-text">정보를 찾을 수 없습니다.</p>
+          </b-card>
+        </div>
+        <div v-if="movie_list">
+          <b-row>
+            <div v-for="movie in movie_list" :key="movie.id" class="card-wrapper">
+              <b-card class="movie-card bg-dark text-white h-100 d-flex align-items-stretch">
+                <div v-if="movie_detail">
+                  <b-card-img
+                    :src="getBackdropUrl(movie.poster_path || movie.backdrop_path)"
+                    alt="Backdrop Image"
+                    @click="fetchDetail(movie.id); handleMovieClick(movie);"
+                  ></b-card-img>
+                </div>
+                <div v-else>
+                  <b-card-img
+                    :src="getBackdropUrl(movie.poster_path || movie.backdrop_path)"
+                    alt="Backdrop Image"
+                    @click="fetchDetail(movie.id); handleMovieClick(movie);"
+                  ></b-card-img>
+                </div>
+                <b-card-title class="movie-title">{{ movie.title }}</b-card-title>
+                <b-card-text>{{ movie.id }}</b-card-text>
+              </b-card>
+            </div>
+          </b-row>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
+
+
 
 <script>
 import axios from "axios";
@@ -260,8 +309,90 @@ export default {
 ul {
   margin-left: 1rem;
 }
-img {
-  width: 100px;
-  height: 100px;
+.article-list {
+  text-align: start;
+  flex-direction: column;
 }
+ul {
+  margin-left: 1rem;
+}
+.card-wrapper {
+  width: 500px;
+  padding-left: 8px;
+  margin-left: 50px;
+  padding-bottom:20px;
+}
+.movie-poster {
+  position: relative;
+}
+.movie-card {
+  position: relative;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  transition: 0.3s;
+  width: 100%;
+  border-radius: 5px;
+  padding: 2%;
+  margin-bottom: 2rem;
+  padding:0;
+}
+.movie-title {
+  position: absolute;
+  bottom: 0;
+  color: white;
+  background-color: rgba(0, 0, 0, 0.5);
+  width: 100%;
+}
+.movie-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: opacity 0.3s ease-in-out;
+
+}
+.movie-card:hover img {
+  opacity: 0.5;
+}
+.movie-card .movie-poster {
+  position: relative;
+}
+.movie-card:hover:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.7); /* 50% transparent black */
+  border-radius: 5px;
+}
+.movie-title {
+  position: absolute;
+  top: 60%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+.movie-card:hover .movie-title {
+  opacity: 1;
+}
+.movie-card h2 {
+  text-align: center;
+
+  transform: translate(-50%, -50%);
+  color: black;
+  text-align: center;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+.movie-card:hover h2 {
+  opacity: 1;
+}
+.movie-card h5 {
+  font-family: "Nanum Gothic", sans-serif;
+  font-weight: 400;
+  color: white;
+}
+
 </style>

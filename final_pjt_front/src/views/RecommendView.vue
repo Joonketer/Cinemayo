@@ -1,6 +1,9 @@
 <template>
   <div>
+    <div class="d-flex align-items-center justify-content-center bg-#333 text-white">
     <h1>영화 추천 페이지</h1>
+  </div>
+   <hr>
     <RecommendList />
     <hr>
     <ClickedList />

@@ -1,52 +1,54 @@
 <template>
-  <div id="app">
-    <div class="container">
-      <b-navbar toggleable="lg" type="dark" variant="#333"
-      v-if="!isLoginPage && !isSignupPage">
-        <b-navbar-brand @click="navigateHome">
-          <img class="logo" src="@/assets/Cinemayologo.png" alt="minilogo" />
-        </b-navbar-brand>
+      <div id="app">
+        <div class="container">
+          <b-navbar toggleable="md" type="dark" variant="#333"
+          v-if="!isLoginPage && !isSignupPage">
+            <b-navbar-brand @click="navigateHome" class="d-flex justify-content-center">
+              <img class="logo" src="@/assets/Cinemayologo.png" alt="minilogo" />
+            </b-navbar-brand>
+    
+            <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
+    
+            <b-collapse id="nav-collapse"  is-nav>
+              <b-navbar-nav class="category-navbar d-flex justify-content-center">            
+    <b-nav-item class="navbar-item"
+      v-if="isLogin" :to="{name: 'ProfileView', params: { username: currentUser.username || '' },}">내 프로필</b-nav-item>
+    <b-nav-item class="navbar-item" :to="{ name: 'ArticleView' }">All Movies</b-nav-item>
+    <b-nav-item class="navbar-item" :to="{ name: 'RecommendView' }">추천영화</b-nav-item>
+    <b-nav-item class="navbar-item" :to="{ name: 'BoxOfficeView' }">박스오피스</b-nav-item>
+    <b-nav-item class="navbar-item" :to="{ name: 'TagSearchView' }">태그검색</b-nav-item>
+    <b-nav-item class="navbar-item" :to="{ name: 'CommunityView' }">커뮤니티</b-nav-item>
+    <b-nav-item class="navbar-item" v-if="!isLogin" :to="{ name: 'SignUpView' }"
+      >SignUpPage</b-nav-item
+    >
+    <b-nav-item class="navbar-item" v-if="isLogin" @click="logout">Logout</b-nav-item>
 
-        <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
-
-        <b-collapse id="nav-collapse" is-nav>
-          <b-navbar-nav>
-            <b-nav-item
-              v-if="isLogin" :to="{name: 'ProfileView', params: { username: currentUser.username || '' },}">내 프로필</b-nav-item>
-            <b-nav-item :to="{ name: 'ArticleView' }">All Movies</b-nav-item>
-            <b-nav-item :to="{ name: 'RecommendView' }">추천영화</b-nav-item>
-            <b-nav-item :to="{ name: 'BoxOfficeView' }">박스오피스</b-nav-item>
-            <b-nav-item :to="{ name: 'TagSearchView' }">태그검색</b-nav-item>
-            <b-nav-item :to="{ name: 'CommunityView' }">커뮤니티</b-nav-item>
-            <b-nav-item v-if="!isLogin" :to="{ name: 'SignUpView' }"
-              >SignUpPage</b-nav-item
-            >
-            <b-nav-item v-if="isLogin" @click="logout">Logout</b-nav-item>
-            <div class="search-container" v-if="isLogin">
-              <b-form-input
-                v-model="searchQuery"
-                placeholder="영화 검색어를 입력하세요"
-                @keyup.enter="searchMovies"
-              />
-              <b-button
-                size="sm"
-                class="my-2 my-sm-0"
-                type="submit"
-                @click="searchMovies"
-                >검색</b-button
-              >
-            </div>
-          </b-navbar-nav>
-        </b-collapse>
-      </b-navbar>
-      <div class="content">
-        <router-view
-          :search-results="searchResults"
-          :search-query="searchQuery"
-        />
-      </div>
+      <div class="search-container d-flex justify-content-center align-items-center" v-if="isLogin">
+          <b-form-input
+            v-model="searchQuery"
+            placeholder="영화 검색어를 입력하세요"
+            @keyup.enter="searchMovies"
+            class="search-input"
+          />
+          <b-button
+            size="sm"
+            class="my-2 my-sm-0 search-button"
+            type="submit"
+            @click="searchMovies"
+            >검색</b-button
+          >
+        </div>
+      </b-navbar-nav>
+    </b-collapse>
+    </b-navbar>
+    <div class="content">
+    <router-view
+      :search-results="searchResults"
+      :search-query="searchQuery"
+    />
     </div>
   </div>
+</div>
 </template>
 <script>
 export default {
@@ -162,55 +164,44 @@ body,
   padding: 0;
   background-color: #333; /* 원하는 색상 코드로 변경 */
   /* color: #fff; */
-  font-family: "Nanum Gothic", sans-serif;
+  font-family: "Nanum Gothic";
   font-weight: 400;
   color: white;
 }
 .app {
   display: flex;
-  font-family: "Roboto", sans-serif;
-}
-#sidebar {
-  display: fixed;
-  position: fixed; /* fixed positioning */
-  top: 0; /* stick to top */
-  left: 0; /* stick to left */
-  height: 100%; /* full height */
-  z-index: 2; /* Ensure sidebar is on top of content */
 }
 .container {
-  padding-left: 220px; /* Make sure your sidebar width and this padding match */
-}
-
-.sidebar {
-  width: 220px;
-  background-color: darkgrey;
-}
-
-.content {
-  width: 100%;
-}
-@media screen and (max-width: 768px) {
-  #sidebar {
     width: 100%;
-    height: auto;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+    max-width: 1200px; /* You can increase this value according to your need */
   }
-
-  .container {
-    padding-left: 0;
-  }
-}
 .navbar.navitem {
   color: lightgray;
-  font-size: 25px;
+  font-size: 15px;
 }
-.navbar.navitem.router-link-exact-active {
-  color: orange;
-}
-.navbar.navitem:hover {
-  color: skyblue;
-}
+.b-navbar {
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+/* Reduce this value according to your need */
+  }
+  .category-navbar {
+    flex-wrap: nowrap; /* Prevent line break in navbar */
+    font-size: 1.5rem; /* Increase the size of the navbar items */
+  }
+  /* Additional CSS to increase the size of content and logo */
+  .logo {
+    height: auto;
+    width: auto; /* Increase this value according to your need */
+  }
+
 .search-container {
+  width: 300px;
+  height: 40px;
   display: flex;
   justify-content: space-evenly;
   align-items: center;
@@ -221,6 +212,24 @@ hr {
 }
 a.router-link-active {
   color: #f5f5f5; /* a color close to white */
+}
+
+.search-container button {
+  width:60px;
+  height: 100%; /* make them take full height of the container */
+  text-align: center;
+  justify-content: center;
+}
+a{
+  font-size: 16px;
+}
+li{
+  width:auto;
+  height:auto;
+}
+.navbar-item {
+  width: 100px;
+  height: 60px;
 }
 </style>
 

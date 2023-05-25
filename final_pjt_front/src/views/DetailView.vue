@@ -45,8 +45,8 @@
     </div>
 
     <!-- 리뷰 작성 폼 -->
-
-    <form @submit.prevent="submitReview">
+    <div class="review-area">
+    <form @submit.prevent="submitReview"  class="review-form">
       <p>작성자: {{ currentUser }}</p>
       <label for="user_vote_average">평점:</label>
       <select id="user_vote_average" v-model="user_vote_average">
@@ -74,14 +74,14 @@
         <h2>리뷰 목록</h2>
         <ul>
           <li v-for="review in article.reviews" :key="review.id">
-            {{ review.content }} - 평점:
+            {{ review.content }}  | 
+            평점:
             <span
               v-for="star in getStars(review.user_vote_average)"
               :key="star"
               class="star"
-              >★</span
-            >
-            - 작성자:
+              >★</span> |
+             작성자:
             {{ review.user.username }}
             <button @click="likeReview(review.id)">
               좋아요
@@ -99,6 +99,7 @@
       </div>
     </div>
   </div>
+</div>
 </template>
 
 
@@ -273,7 +274,18 @@ export default {
   background-color: #333;
   color: #fff;
 }
-
+.review-area {
+  display: flex; /* form과 writtenReviews가 동일한 y축을 공유하도록 설정 */
+  flex-direction: column;
+  justify-content: space-between; /* form과 writtenReviews 사이에 공간을 균등하게 배분 */
+  align-items: start; /* form과 writtenReviews의 y축 시작 위치를 동일하게 설정 */
+  width: 80%; /* form과 writtenReviews의 너비 합이 80%가 되도록 설정 */
+  padding: 20px 0; /* form과 writtenReviews 주위에 패딩 추가 */
+}
+.review-form {
+  flex: 1; /* form이 가능한 모든 공간을 차지하도록 설정 */
+  /* ... */
+}
 iframe {
   width: 1000px;
   height: 750px;
@@ -324,7 +336,18 @@ form {
   flex-shrink: 0; /* 버튼 크기가 줄어드는 것을 방지합니다. */
   width: 50px; /* 버튼의 너비를 설정합니다. 원하는대로 조절하실 수 있습니다. */
 }
+
 .writtenReviews {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
   padding-right: 220px;
+  width: 100%; /* div.writtenReviews의 너비를 늘립니다. */
+}
+.writtenReviews li {
+  display: flex;
+  flex-direction: row;
+  width: 1600px; /* li 항목의 너비를 자동으로 설정합니다. */
+  /* ... */
 }
 </style>

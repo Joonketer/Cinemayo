@@ -70,6 +70,7 @@ export default {
 };
 </script>
 
+
 <style scoped>
 .movie-card {
   position: relative;

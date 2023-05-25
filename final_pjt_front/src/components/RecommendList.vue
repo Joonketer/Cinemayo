@@ -3,6 +3,8 @@
     <div class="text-center">
     <h3>10번 클릭한 것들 중 가장 많은 장르</h3>
     </div>  
+    <hr>
+    <br>
     <div v-if="isLoading">Loading...</div>
     <div v-else>
       <div v-if="sortedGenres.length === 0">정보없음</div>
@@ -12,9 +14,9 @@
           <h2>{{ getGenreName(genre.id) }}</h2>
           </div>
           <b-row>
-            <b-col md="4" v-for="movie in recommendedMovies[genre.id]" :key="movie.movie_id">
+              <div v-for="movie in recommendedMovies[genre.id]" :key="movie.movie_id" class="card-wrapper">
               <b-card
-                class="movie-card bg-dark"
+                class="movie-card bg-dark h-100 d-flex align-items-stretch"
                 @mouseenter="hovering = true"
                 @mouseleave="hovering = false"
               >
@@ -30,20 +32,20 @@
                       alt="Movie poster"
                     ></b-card-img>
                     <b-card-title v-show="hovering" class="movie-title">
-                      {{ movie.title }} <br />
+                      {{ movie.title }}
+                       <br/>
                       ★ : {{ movie.vote_average }}
                     </b-card-title>
                   </div>
                 </router-link>
               </b-card>
-            </b-col>
+            </div>
           </b-row>
         </div>
       </div>
     </div>
   </div>
 </template>
-
 <script>
 import axios from "axios";
 import { mapState } from "vuex";
@@ -192,6 +194,12 @@ export default {
 ul {
   margin-left: 1rem;
 }
+.card-wrapper {
+  width: 500px;
+  padding-left: 8px;
+  margin-left: 50px;
+  padding-bottom:20px;
+}
 .movie-poster {
   position: relative;
 }
@@ -199,10 +207,11 @@ ul {
   position: relative;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
   transition: 0.3s;
-  width: 30%;
+  width: 100%;
   border-radius: 5px;
   padding: 2%;
   margin-bottom: 2rem;
+  padding:0;
 }
 .movie-title {
   position: absolute;
@@ -216,6 +225,7 @@ ul {
   height: 100%;
   object-fit: cover;
   transition: opacity 0.3s ease-in-out;
+
 }
 .movie-card:hover img {
   opacity: 0.5;
@@ -235,7 +245,7 @@ ul {
 }
 .movie-title {
   position: absolute;
-  top: 50%;
+  top: 60%;
   left: 50%;
   transform: translate(-50%, -50%);
   text-align: center;
@@ -262,4 +272,5 @@ ul {
   font-weight: 400;
   color: white;
 }
+
 </style>

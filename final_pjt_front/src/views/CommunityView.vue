@@ -8,7 +8,7 @@
     <table>
       <thead>
         <tr>
-          <th>ID</th> 
+          <th>게시글 번호</th> 
           <th>작성자</th> 
           <th>Title</th> 
           <th>Board Type</th> 

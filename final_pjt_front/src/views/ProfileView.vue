@@ -37,31 +37,65 @@
 <template>
   <b-container fluid class="d-flex align-items-center justify-content-center vh-100 bg-#333 text-white">
     <b-card class="text-white bg-dark" style="width: 30rem;">
-      <h1 class="text-center">{{ userinfo.username }}님의 사용자 프로필</h1>
+      <h1 class="text-center">{{ userinfo.username }}님의 프로필</h1>
       <b-card-body>
+
         <p>팔로잉: {{ userinfo.followings.length }}</p>
         <hr />
+
+        <!-- <li v-for="following in userinfo.followings" :key="following.id">
+          {{ following.following }}
+          </li>
+        <hr> -->
+
         <p>팔로워: {{ userinfo.followers.length }}</p>
         <hr />
+
+        <!-- <li v-for="follower in userinfo.followers" :key="follower.id">
+          {{ follower.follower }}
+          </li>
+        <hr> -->
+
         <p>좋아요 수: {{ userinfo.like_boards.length }}</p>
-        <hr />
+        <hr/>
+        
+        <li v-for="board in userinfo.like_boards" :key="board.id">
+          {{ board.title }} : {{ board.content }}
+          </li>
+        <hr>
+        
         <p>게시물 수: {{ userinfo.boards.length }}</p>
         <hr />
+
+        <li v-for="board in userinfo.boards" :key="board.id">
+          {{ board.title }} : {{ board.content }}
+          </li>
+        <hr>
+        
         <p>좋아요 댓글 수: {{ userinfo.like_comments.length }}</p>
         <hr />
+        <li v-for="comment in userinfo.like_comments" :key="comment.id">
+          {{ comment.content }}
+          </li>
+        <hr>
+        
         <p>댓글 수: {{ userinfo.comments.length }}</p>
         <div>
           <li v-for="comment in userinfo.comments" :key="comment.id">
-          {{ comment.title }} :{{ comment.content }}
+          {{ comment.content }}
           </li>
+          <hr>
         </div>
-        <hr />
+
+        <!-- 좋아요 영화 수 , 좋아요 한 영화 목록  -->      
         <p>좋아요 영화 수: {{ userinfo.like_movies.length }}</p>
-        <div>
+        <hr>
+        <div @click="handleMovieClick(movie)">
         <li v-for="movie in userinfo.like_movies" :key="movie.id">
         {{ movie.title }}
         </li>
         </div>
+
         <hr />
         <div>
           <h1>가입된 사용자 목록</h1>
@@ -75,6 +109,7 @@
     </b-card>
   </b-container>
 </template>
+
 <script>
 import { mapState } from "vuex";
 import axios from "axios";
@@ -104,7 +139,7 @@ export default {
     },
   },
   created() {
-    if (this.isLogin) {
+    if (this.isLogin && this.userinfo) {
       this.$store.dispatch("getMyProfile");
       this.fetchUsers();
       this.getArticles();
@@ -211,6 +246,33 @@ export default {
         .get("http://127.0.0.1:8000/profile/allusers/check/") // Django API 엔드포인트를 설정하세요
         .then((response) => {
           this.users = response.data;
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    },
+    handleMovieClick(movie) {
+      if (!this.isLogin) {
+        this.$router.push({ name: "Login" });
+        return;
+      }
+      this.$router.push({
+        name: "DetailView",
+        params: { id: movie.movie_id },
+      });
+      const payload = {
+        movie: movie.id,
+        genre_ids: movie.genre_ids.map((genre) => genre.genre.id),
+      };
+
+      axios
+        .post("http://127.0.0.1:8000/api/v1/recent_movies/", payload, {
+          headers: {
+            Authorization: `Token ${this.token}`,
+          },
+        })
+        .then((response) => {
+          console.log(response.data);
         })
         .catch((error) => {
           console.error(error);
