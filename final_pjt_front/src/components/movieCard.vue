@@ -4,73 +4,72 @@
     @mouseenter="hovering = true"
     @mouseleave="hovering = false"
   >
-    <router-link
-      :to="{
-        name: 'DetailView',
-        params: { id: article.movie_id },
-      }"
-    >
-      <div class="movie-poster" @click="handleMovieClick(article)">
-        <img
-          :src="'https://image.tmdb.org/t/p/w500' + article.poster_path"
-          alt="Movie poster"
-        />
-        <h5 v-show="hovering" class="movie-title">
-          {{ article.title }}
-          <br />
-          ★ : {{ article.vote_average }}
-        </h5>
-      </div>
-    </router-link>
-    <hr />
+    <div class="movie-poster" @click="handleMovieClick(movie)">
+      <img :src="getImageUrl(movie.poster_path)" alt="Movie poster" />
+      <h5 v-show="hovering" class="movie-title">
+        {{ movie.title }}
+        <br />
+        ★ : {{ movie.vote_average }}
+      </h5>
+    </div>
   </div>
 </template>
-
-<script>
+  
+  <script>
 import axios from "axios";
-import { mapState } from "vuex";
+import { mapState, mapGetters } from "vuex";
 
 export default {
-  name: "ArticleListItem",
+  name: "movieCard",
   props: {
-    article: Object,
-  },
-  computed: {
-    ...mapState(["token"]),
+    movie: Object,
   },
   data() {
     return {
       hovering: false,
     };
   },
+  computed: {
+    ...mapState(["token"]),
+    ...mapGetters(["isLogin"]),
+  },
   methods: {
-    handleMovieClick(article) {
+    getImageUrl(path) {
+      return "https://image.tmdb.org/t/p/w500" + path;
+    },
+    handleMovieClick(movie) {
+      if (!this.isLogin) {
+        this.$router.push({ name: "Login" });
+        return;
+      }
+      this.$router.push({
+        name: "DetailView",
+        params: { id: movie.movie_id },
+      });
       const payload = {
-        movie: article.movie_id,
-        genre_ids: article.genre_ids.map((genre) => genre.genre_id),
+        movie: movie.id,
+        genre_ids: movie.genre_ids.map((genre) => genre.genre.id),
       };
 
-      // 서버로 영화 클릭 정보 전송
       axios
-        .post("http://127.0.0.1:8000/api/v1/recent_moives/", payload, {
+        .post("http://127.0.0.1:8000/api/v1/recent_movies/", payload, {
           headers: {
             Authorization: `Token ${this.token}`,
           },
         })
         .then((response) => {
-          // 처리 성공 시 로직
           console.log(response.data);
         })
         .catch((error) => {
-          // 에러 처리 로직
           console.error(error);
         });
     },
   },
 };
 </script>
-
-<style scoped>
+  
+  <style>
+/* add your styles here */
 .movie-card {
   position: relative;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
@@ -132,10 +131,10 @@ export default {
 .movie-card:hover h2 {
   opacity: 1;
 }
-.movie-card h5 {
+.movie-card h3 {
   font-family: "Nanum Gothic", sans-serif;
   font-weight: 400;
   color: white;
 }
 </style>
-
+  
