@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <div class="profile">
     <h1>{{ userinfo.username }}님의 사용자 프로필</h1>
     <hr />
@@ -30,8 +30,48 @@
       </ul>
     </div>
   </div>
+</template> -->
+<template>
+  <b-container fluid class="d-flex align-items-center justify-content-center vh-100 bg-#333 text-white">
+    <b-card class="text-white bg-dark" style="width: 30rem;">
+      <h1 class="text-center">{{ userinfo.username }}님의 사용자 프로필</h1>
+      <b-card-body>
+        <p>팔로잉: {{ userinfo.followings.length }}</p>
+        <hr />
+        <p>팔로워: {{ userinfo.followers.length }}</p>
+        <hr />
+        <p>좋아요 수: {{ userinfo.like_boards.length }}</p>
+        <hr />
+        <p>게시물 수: {{ userinfo.boards.length }}</p>
+        <hr />
+        <p>좋아요 댓글 수: {{ userinfo.like_comments.length }}</p>
+        <hr />
+        <p>댓글 수: {{ userinfo.comments.length }}</p>
+        <div>
+          <li v-for="comment in userinfo.comments" :key="comment.id">
+          {{ comment.title }} :{{ comment.content }}
+          </li>
+        </div>
+        <hr />
+        <p>좋아요 영화 수: {{ userinfo.like_movies.length }}</p>
+        <div>
+        <li v-for="movie in userinfo.like_movies" :key="movie.id">
+        {{ movie.title }}
+        </li>
+        </div>
+        <hr />
+        <div>
+          <h1>가입된 사용자 목록</h1>
+          <ul>
+            <li v-for="user in randomUsers" :key="user.id">
+              <router-link :to="`/profile/${user.username}`">{{ user.username }}</router-link>
+            </li>
+          </ul>
+        </div>
+      </b-card-body>
+    </b-card>
+  </b-container>
 </template>
-
 <script>
 import { mapState } from "vuex";
 import axios from "axios";
