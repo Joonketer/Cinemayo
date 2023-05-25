@@ -69,6 +69,12 @@ export default {
     isLogin() {
       return this.$store.getters.isLogin;
     },
+    isSignupPage() {
+      return this.$route.path === '/signup'; 
+    },
+    isLoginPage() {
+      return this.$route.path === '/login';  // adjust this path to your login page route
+    },
   },
   watch: {
     $route(to, from) {

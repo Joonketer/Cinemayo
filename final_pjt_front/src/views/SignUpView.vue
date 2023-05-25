@@ -1,6 +1,6 @@
 <template>
   <b-container fluid class="d-flex align-items-center justify-content-center vh-100 bg-#333 text-white">
-    <b-card class="text-white bg-dark" style="width: 30rem;">
+    <b-card border-variant=light class="text-white bg-dark" style="width: 30rem;">
       <h1 class="text-center">회원가입</h1>
       <b-card-body>
         <form @submit.prevent="signUp">
