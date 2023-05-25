@@ -124,8 +124,6 @@ export default {
         headers: { Authorization: `Token ${this.token}` },
       })
         .then((res) => {
-          console.log("로그인");
-          console.log(res);
           this.currentUser = res.data; // 사용자 정보 전체를 저장
           this.user_id = res.data.pk;
 
@@ -170,7 +168,6 @@ export default {
           }
         )
         .then(() => {
-          console.log("좋아요 성공");
           this.getBoardDetail();
         })
         .catch((err) => {

@@ -58,12 +58,11 @@ export default {
         alert("비밀번호가 일치하지 않습니다.");
         return;
       }
-      console.log(payload);
+
       this.$store.dispatch("signUp", payload);
     },
     checkUsernameAvailability() {
       const username = this.username;
-      console.log(username);
 
       this.usernameCheckInProgress = true; // username 중복 확인이 진행 중임을 표시하는 플래그를 설정합니다.
 

@@ -141,7 +141,6 @@ export default {
         return;
       }
 
-      console.log("모든데이터", this.searchResults);
       const movieData = {
         movie_id: movie_detail.id,
         overview: movie_detail.overview,
@@ -155,8 +154,7 @@ export default {
         genre_ids: movie_detail.genres,
         // 필요한 다른 영화 정보도 추가할 수 있습니다.
       };
-      console.log("확인", movie_detail);
-      console.log("내부", movieData);
+
       axios
         .post(API_URL, movieData)
         .then(() => {
@@ -175,7 +173,7 @@ export default {
         .get(API_URL)
         .then((response) => {
           const movieData = response.data;
-          console.log("최종", movieData);
+
           this.$router.push({
             name: "DetailView",
             params: movieData,
