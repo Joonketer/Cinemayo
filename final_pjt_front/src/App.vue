@@ -42,7 +42,7 @@ export default {
   },
   computed: {
     currentUser() {
-      return this.$store.state.userinfo; // 현재 로그인된 회원의 정보를 가져옴
+      return this.$store.state.userinfo || {}; // 현재 로그인된 회원의 정보를 가져옴
     },
   },
   watch: {
