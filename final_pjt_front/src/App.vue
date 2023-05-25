@@ -10,7 +10,7 @@
         <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
         <b-collapse id="nav-collapse" is-nav>
-          <b-navbar-nav>
+          <b-navbar-nav class="d-flex justify-content-center">
             <div class="search-container" v-if="isLogin">
               <b-form-input
                 v-model="searchQuery"
