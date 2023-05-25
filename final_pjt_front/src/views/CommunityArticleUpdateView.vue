@@ -1,16 +1,3 @@
-<!-- <template>
-  <div>
-    <h1>게시글 수정</h1>
-    <form @submit.prevent="updateBoard">
-      <label for="title">제목 : </label>
-      <input type="text" id="title" v-model.trim="title" /><br />
-      <label for="content">내용 : </label>
-      <textarea id="content" cols="30" rows="10" v-model="content"></textarea
-      ><br />
-      <input type="submit" id="submit" />
-    </form>
-  </div>
-</template> -->
 <template>
 <b-container class="d-flex align-items-center justify-content-center vh-100">
   <b-card border-variant="light" class="bg-dark" style="width: 30rem;">

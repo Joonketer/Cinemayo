@@ -216,7 +216,9 @@ export default {
 .b-form-checkbox label {
   font-size: 1.5rem; /* adjust as needed */
 }
-
+.b-form-checkbox label.custom-control-label span {
+  color: red; /* 변경할 색상을 지정하세요 */
+}
 .movie-card {
   position: relative;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);

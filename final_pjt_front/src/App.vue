@@ -15,6 +15,17 @@
 
         <b-collapse id="nav-collapse" is-nav>
           <b-navbar-nav>
+            <b-nav-item
+              v-if="isLogin" :to="{name: 'ProfileView', params: { username: currentUser.username || '' },}">내 프로필</b-nav-item>
+            <b-nav-item :to="{ name: 'ArticleView' }">All Movies</b-nav-item>
+            <b-nav-item :to="{ name: 'RecommendView' }">추천영화</b-nav-item>
+            <b-nav-item :to="{ name: 'BoxOfficeView' }">박스오피스</b-nav-item>
+            <b-nav-item :to="{ name: 'TagSearchView' }">태그검색</b-nav-item>
+            <b-nav-item :to="{ name: 'CommunityView' }">커뮤니티</b-nav-item>
+            <b-nav-item v-if="!isLogin" :to="{ name: 'SignUpView' }"
+              >SignUpPage</b-nav-item
+            >
+            <b-nav-item v-if="isLogin" @click="logout">Logout</b-nav-item>
             <div class="search-container" v-if="isLogin">
               <b-form-input
                 v-model="searchQuery"
@@ -29,23 +40,6 @@
                 >검색</b-button
               >
             </div>
-            <b-nav-item
-              v-if="isLogin"
-              :to="{
-                name: 'ProfileView',
-                params: { username: currentUser.username || '' },
-              }"
-              >내 프로필</b-nav-item
-            >
-            <b-nav-item :to="{ name: 'ArticleView' }">All Movies</b-nav-item>
-            <b-nav-item :to="{ name: 'RecommendView' }">추천영화</b-nav-item>
-            <b-nav-item :to="{ name: 'BoxOfficeView' }">박스오피스</b-nav-item>
-            <b-nav-item :to="{ name: 'TagSearchView' }">태그검색</b-nav-item>
-            <b-nav-item :to="{ name: 'CommunityView' }">커뮤니티</b-nav-item>
-            <b-nav-item v-if="!isLogin" :to="{ name: 'SignUpView' }"
-              >SignUpPage</b-nav-item
-            >
-            <b-nav-item v-if="isLogin" @click="logout">Logout</b-nav-item>
           </b-navbar-nav>
         </b-collapse>
       </b-navbar>
@@ -79,7 +73,14 @@ export default {
     isLogin() {
       return this.$store.getters.isLogin;
     },
+    isSignupPage() {
+      return this.$route.path === '/signup'; 
+    },
+    isLoginPage() {
+      return this.$route.path === '/login';  // adjust this path to your login page route
+    },
   },
+
   watch: {
     $route(to, from) {
       if (to.name === from.name && to.fullPath === from.fullPath) {
@@ -88,6 +89,7 @@ export default {
       }
     },
   },
+  
   methods: {
     logout() {
       this.$store
@@ -108,7 +110,6 @@ export default {
       if (this.$route.name === "HomeView") {
         return;
       }
-
       // "HomeView"로 이동합니다.
       this.$router.push({ name: "HomeView" });
     },
@@ -228,7 +229,11 @@ body,
 hr {
   border-color: white;
 }
+<<<<<<< HEAD
 .a {
+=======
+a.router-link-active {
+>>>>>>> 4ad94c06a2bdfe17f4c405926cdca4e30af4f356
   color: #f5f5f5; /* a color close to white */
 }
 </style>

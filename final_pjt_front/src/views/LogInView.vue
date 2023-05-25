@@ -1,5 +1,5 @@
 <template>
-  <b-container fluid class="d-flex align-items-center justify-content-center width:30rem bg-#333 text-white">
+  <b-container fluid class="d-flex align-items-center justify-content-center vh-100 bg-#333 text-white">
     <b-card border-variant=light class="text-white bg-dark" style="width: 30rem;">
       <h1 class="text-center">LogIn Page</h1>
       <b-card-body>
