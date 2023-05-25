@@ -54,6 +54,7 @@ export default {
       movieGenres: [],
       recommendedMovies: {},
       isLoading: true, // 추가된 isLoading 속성
+      hovering: false,
     };
   },
   mounted() {
