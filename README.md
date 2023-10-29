@@ -25,9 +25,6 @@ front-end:
 - Vue
 - bootstrap-vue
 
-## 타임라인
-
----
 
 back 기본 구조 
 
